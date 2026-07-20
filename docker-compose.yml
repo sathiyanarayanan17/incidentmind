@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  orchestrator:
+    build: .
+    container_name: incidentmind-orchestrator
+    env_file: .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import psycopg2; psycopg2.connect('${COCKROACHDB_URL}')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  demo:
+    build: .
+    container_name: incidentmind-demo
+    command: streamlit run demo/app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    env_file: .env
+    restart: unless-stopped

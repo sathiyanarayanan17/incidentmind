@@ -1,0 +1,37 @@
+{
+    "mcpServers": {
+        "cockroachdb": {
+            "url": "https://cockroachlabs.cloud/mcp",
+            "description": "CockroachDB Cloud MCP Server - Provides read-only access to IncidentMind's incident memory",
+            "config": {
+                "cluster_id": "${COCKROACHDB_CLUSTER_ID}",
+                "database": "incidentmind",
+                "mode": "read-only"
+            },
+            "notes": [
+                "Safe by default: read-only mode with full audit logging",
+                "Human operators can query incident memory via Claude or Cursor",
+                "Example queries: 'Show me all P1 incidents this week', 'What was the root cause of the last database issue?'",
+                "No custom proxy required - connects directly to CockroachDB Cloud"
+            ]
+        }
+    },
+    "usage_examples": [
+        {
+            "prompt": "What incidents happened this week?",
+            "description": "Lists recent incidents with severity and status"
+        },
+        {
+            "prompt": "Find incidents similar to 'connection pool exhausted'",
+            "description": "Semantic search across incident history"
+        },
+        {
+            "prompt": "What patterns have we learned about database issues?",
+            "description": "Shows correlation patterns for database-related incidents"
+        },
+        {
+            "prompt": "Show me the resolution for the last SSL certificate issue",
+            "description": "Retrieves past resolution steps"
+        }
+    ]
+}
