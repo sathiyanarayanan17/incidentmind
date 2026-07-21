@@ -1,4 +1,4 @@
-"""IncidentMind — Premium Multi-Agent DevOps Incident Responder Demo.
+"""IncidentMind - Premium Multi-Agent DevOps Incident Responder Demo.
 
 A comprehensive, production-quality Streamlit demo showcasing:
 - Live Incident Simulation
@@ -45,7 +45,7 @@ import numpy as np
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# ─── Conditional Imports (graceful fallback for demo mode) ────────
+#  Conditional Imports (graceful fallback for demo mode) 
 
 DEMO_MODE = True
 try:
@@ -57,16 +57,16 @@ try:
 except ImportError:
     pass
 
-# ─── Page Config ──────────────────────────────────────────────────
+#  Page Config 
 
 st.set_page_config(
-    page_title="IncidentMind — AI Incident Response",
-    page_icon="🧠",
+    page_title="IncidentMind - AI Incident Response",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# ─── Session State Init ──────────────────────────────────────────
+#  Session State Init 
 
 if "theme" not in st.session_state:
     st.session_state.theme = "dark"
@@ -92,7 +92,7 @@ if "region" not in st.session_state:
     st.session_state.region = random.choice(["us-east-1", "eu-west-1", "ap-south-1"])
 
 
-# ─── Theme Colors ─────────────────────────────────────────────────
+#  Theme Colors 
 
 def get_colors():
     if st.session_state.theme == "dark":
@@ -127,7 +127,7 @@ def get_colors():
         }
 
 
-# ─── Mock Data Generators ─────────────────────────────────────────
+#  Mock Data Generators 
 
 INCIDENT_TYPES = [
     {"title": "Database Connection Pool Exhausted", "service": "payment-service", "severity": "critical"},
@@ -237,7 +237,7 @@ seed_demo_data()
 
 
 
-# ─── CSS Injection ────────────────────────────────────────────────
+#  CSS Injection 
 
 def inject_css():
     """Inject comprehensive custom CSS based on current theme."""
@@ -604,14 +604,14 @@ inject_css()
 
 
 
-# ─── Sidebar Navigation ──────────────────────────────────────────
+#  Sidebar Navigation 
 
 def render_sidebar():
     c = get_colors()
     with st.sidebar:
         st.markdown(f"""
         <div style="padding: 16px 0; text-align: center; border-bottom: 1px solid {c['border']}; margin-bottom: 16px;">
-            <div style="font-size: 2rem;">🧠</div>
+            <div style="font-size: 2rem;"></div>
             <div style="font-size: 1.1rem; font-weight: 800; color: {c['text']};">IncidentMind</div>
             <div style="font-size: 0.75rem; color: {c['text_secondary']};">Multi-Agent DevOps AI</div>
         </div>
@@ -620,42 +620,42 @@ def render_sidebar():
         # Theme toggle
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("🌙 Dark", use_container_width=True, key="btn_dark"):
+            if st.button(" Dark", use_container_width=True, key="btn_dark"):
                 st.session_state.theme = "dark"
                 st.rerun()
         with col2:
-            if st.button("☀️ Light", use_container_width=True, key="btn_light"):
+            if st.button(" Light", use_container_width=True, key="btn_light"):
                 st.session_state.theme = "light"
                 st.rerun()
 
-        st.markdown(f"<div style='margin-top:8px; padding:4px 12px; background:{c['surface2']}; border-radius:6px; text-align:center; font-size:0.75rem; color:{c['text_secondary']};'>{'🌙 Dark Mode' if st.session_state.theme == 'dark' else '☀️ Light Mode'}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='margin-top:8px; padding:4px 12px; background:{c['surface2']}; border-radius:6px; text-align:center; font-size:0.75rem; color:{c['text_secondary']};'>{' Dark Mode' if st.session_state.theme == 'dark' else ' Light Mode'}</div>", unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
 
         # Navigation
         pages = [
-            ("🏠", "home", "Home"),
-            ("🚨", "incidents", "Live Incidents"),
-            ("📡", "agent_feed", "Agent Feed"),
-            ("🔗", "knowledge_graph", "Knowledge Graph"),
-            ("💬", "mcp_query", "MCP Query Panel"),
-            ("💚", "health", "Health Dashboard"),
-            ("📋", "audit", "Audit Log"),
-            ("🔐", "rbac", "RBAC & Access"),
-            ("🌍", "regions", "Multi-Region"),
-            ("🛡️", "rate_limit", "Rate Limiting"),
-            ("📊", "heatmap", "Incident Heatmap"),
-            ("📖", "playbooks", "Playbook Library"),
-            ("⚡", "performance", "Agent Performance"),
-            ("📤", "export", "Export & Share"),
-            ("🎯", "calibration", "Confidence Calibration"),
-            ("🔮", "predictions", "Predictive Alerts"),
-            ("🤖", "multi_chat", "Multi-Agent Chat"),
-            ("▶️", "runbook", "Runbook Dry Run"),
-            ("🔄", "dedup", "Deduplication"),
-            ("⏱️", "mttr", "MTTR Dashboard"),
-            ("📈", "categories", "Failure Categories"),
-            ("💰", "roi", "ROI Calculator"),
+            ("", "home", "Home"),
+            ("", "incidents", "Live Incidents"),
+            ("", "agent_feed", "Agent Feed"),
+            ("", "knowledge_graph", "Knowledge Graph"),
+            ("", "mcp_query", "MCP Query Panel"),
+            ("", "health", "Health Dashboard"),
+            ("", "audit", "Audit Log"),
+            ("", "rbac", "RBAC & Access"),
+            ("", "regions", "Multi-Region"),
+            ("", "rate_limit", "Rate Limiting"),
+            ("", "heatmap", "Incident Heatmap"),
+            ("", "playbooks", "Playbook Library"),
+            ("", "performance", "Agent Performance"),
+            ("", "export", "Export & Share"),
+            ("", "calibration", "Confidence Calibration"),
+            ("", "predictions", "Predictive Alerts"),
+            ("", "multi_chat", "Multi-Agent Chat"),
+            ("", "runbook", "Runbook Dry Run"),
+            ("", "dedup", "Deduplication"),
+            ("⏱", "mttr", "MTTR Dashboard"),
+            ("", "categories", "Failure Categories"),
+            ("", "roi", "ROI Calculator"),
         ]
 
         for icon, key, label in pages:
@@ -667,7 +667,7 @@ def render_sidebar():
         # Region indicator
         st.markdown(f"""
         <div style="margin-top: 24px; padding: 12px; background: {c['surface2']}; border-radius: 8px; font-size: 0.8rem;">
-            <div style="color: {c['text_secondary']}; margin-bottom: 4px;">🌍 Active Region</div>
+            <div style="color: {c['text_secondary']}; margin-bottom: 4px;"> Active Region</div>
             <div style="color: {c['accent']}; font-family: 'JetBrains Mono', monospace; font-weight: 600;">{st.session_state.region}</div>
         </div>
         """, unsafe_allow_html=True)
@@ -676,16 +676,16 @@ def render_sidebar():
         if DEMO_MODE:
             st.markdown(f"""
             <div style="margin-top: 12px; padding: 8px 12px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; text-align: center;">
-                <span style="color: #f59e0b; font-size: 0.8rem; font-weight: 600;">⚡ DEMO MODE</span>
+                <span style="color: #f59e0b; font-size: 0.8rem; font-weight: 600;"> DEMO MODE</span>
             </div>
             """, unsafe_allow_html=True)
 
 render_sidebar()
 
 
-# ─── Helper Rendering Functions ───────────────────────────────────
+#  Helper Rendering Functions 
 
-def render_metric_card(label, value, icon="📊", delta=None):
+def render_metric_card(label, value, icon="", delta=None):
     c = get_colors()
     delta_html = ""
     if delta:
@@ -715,9 +715,9 @@ def render_progress_bar(value, max_val=100):
 
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: HOME (Hero Landing)
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_home():
     c = get_colors()
@@ -726,7 +726,7 @@ def page_home():
     st.markdown(f"""
     <div class="hero-container">
         <div class="hero-badge">
-            <span>🧠 Powered by</span>
+            <span> Powered by</span>
             <span class="hero-badge-highlight">CockroachDB + AWS Bedrock</span>
         </div>
         <h1 class="hero-title">
@@ -747,10 +747,10 @@ def page_home():
 
     cols = st.columns(4)
     metrics = [
-        ("Total Incidents", str(total_incidents), "🚨", "+3 today"),
-        ("Resolved", str(resolved), "✅", f"{int(resolved/max(total_incidents,1)*100)}% rate"),
-        ("Avg Confidence", f"{avg_confidence:.0%}", "🎯", "+2% this week"),
-        ("Avg MTTR", f"{avg_mttr:.0f}m", "⏱️", "↓12% improvement"),
+        ("Total Incidents", str(total_incidents), "", "+3 today"),
+        ("Resolved", str(resolved), "", f"{int(resolved/max(total_incidents,1)*100)}% rate"),
+        ("Avg Confidence", f"{avg_confidence:.0%}", "", "+2% this week"),
+        ("Avg MTTR", f"{avg_mttr:.0f}m", "⏱", "↓12% improvement"),
     ]
     for col, (label, value, icon, delta) in zip(cols, metrics):
         with col:
@@ -759,33 +759,33 @@ def page_home():
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Architecture Overview
-    st.markdown(f'<div class="section-header">⚙️ Architecture Pipeline</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Architecture Pipeline</div>', unsafe_allow_html=True)
 
     # Pipeline visualization
     st.markdown(f"""
     <div class="timeline-container">
         <div class="timeline-step">
-            <div class="timeline-dot active">📥</div>
+            <div class="timeline-dot active"></div>
             <div class="timeline-label">Ingest</div>
         </div>
         <div class="timeline-connector done"></div>
         <div class="timeline-step">
-            <div class="timeline-dot active">🔍</div>
+            <div class="timeline-dot active"></div>
             <div class="timeline-label">Triage</div>
         </div>
         <div class="timeline-connector done"></div>
         <div class="timeline-step">
-            <div class="timeline-dot active">🧠</div>
+            <div class="timeline-dot active"></div>
             <div class="timeline-label">Diagnose</div>
         </div>
         <div class="timeline-connector done"></div>
         <div class="timeline-step">
-            <div class="timeline-dot active">🔗</div>
+            <div class="timeline-dot active"></div>
             <div class="timeline-label">Correlate</div>
         </div>
         <div class="timeline-connector done"></div>
         <div class="timeline-step">
-            <div class="timeline-dot active">🛠️</div>
+            <div class="timeline-dot active"></div>
             <div class="timeline-label">Resolve</div>
         </div>
     </div>
@@ -794,13 +794,13 @@ def page_home():
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Technology Stack
-    st.markdown(f'<div class="section-header">🛠️ Technology Stack</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Technology Stack</div>', unsafe_allow_html=True)
     tech_cols = st.columns(4)
     techs = [
-        ("🪳 CockroachDB", "Distributed SQL + Vector indexing for incident memory"),
-        ("🤖 AWS Bedrock", "Claude & Titan models for agent reasoning & embeddings"),
-        ("🐍 LangChain", "Agent framework with tool-calling & chain-of-thought"),
-        ("🔌 MCP Protocol", "Model Context Protocol for live system querying"),
+        (" CockroachDB", "Distributed SQL + Vector indexing for incident memory"),
+        (" AWS Bedrock", "Claude & Titan models for agent reasoning & embeddings"),
+        (" LangChain", "Agent framework with tool-calling & chain-of-thought"),
+        (" MCP Protocol", "Model Context Protocol for live system querying"),
     ]
     for col, (title, desc) in zip(tech_cols, techs):
         with col:
@@ -816,7 +816,7 @@ def page_home():
     st.markdown("<br>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("🚀 Simulate New Incident", use_container_width=True, key="sim_btn"):
+        if st.button(" Simulate New Incident", use_container_width=True, key="sim_btn"):
             new_incident = generate_incident()
             st.session_state.incidents.insert(0, new_incident)
             st.session_state.agent_feed.insert(0, {
@@ -835,24 +835,24 @@ def page_home():
             st.rerun()
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: LIVE INCIDENTS
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_incidents():
     c = get_colors()
-    st.markdown(f'<div class="section-header">🚨 Live Incident Feed</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Live Incident Feed</div>', unsafe_allow_html=True)
 
     # Controls
     col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
     with col1:
-        search = st.text_input("🔍 Search incidents...", key="inc_search", placeholder="service name, keyword...")
+        search = st.text_input(" Search incidents...", key="inc_search", placeholder="service name, keyword...")
     with col2:
         sev_filter = st.selectbox("Severity", ["All", "critical", "high", "medium", "warning"], key="sev_filter")
     with col3:
         status_filter = st.selectbox("Status", ["All", "open", "triaging", "diagnosing", "resolving", "resolved"], key="status_filter")
     with col4:
-        if st.button("➕ New Incident", key="new_inc"):
+        if st.button(" New Incident", key="new_inc"):
             new_inc = generate_incident()
             st.session_state.incidents.insert(0, new_inc)
             st.rerun()
@@ -893,7 +893,7 @@ def page_incidents():
                     <td style="font-weight:500;">{inc['title']}</td>
                     <td><code style="font-size:0.8rem;">{inc['service']}</code></td>
                     <td>{render_severity_badge(inc['severity'])}</td>
-                    <td><span style="color:{status_color}; font-weight:600;">● {inc['status']}</span></td>
+                    <td><span style="color:{status_color}; font-weight:600;"> {inc['status']}</span></td>
                     <td style="font-family:'JetBrains Mono',monospace; font-size:0.8rem;">{inc['assigned_agent']}</td>
                     <td><span style="color:{c['accent']}; font-weight:600;">{inc['confidence']:.0%}</span></td>
                     <td>{inc['mttr_minutes']}m</td>
@@ -905,12 +905,12 @@ def page_incidents():
         st.info("No incidents match your filters.")
 
     # Incident Timeline for selected incident
-    st.markdown(f'<br><div class="section-header">📍 Incident Pipeline View</div>', unsafe_allow_html=True)
+    st.markdown(f'<br><div class="section-header"> Incident Pipeline View</div>', unsafe_allow_html=True)
     if filtered:
         selected = filtered[0]
         stages = ["open", "triaging", "diagnosing", "resolving", "resolved"]
         current_idx = stages.index(selected["status"]) if selected["status"] in stages else 0
-        icons = ["📥", "🔍", "🧠", "🛠️", "✅"]
+        icons = ["", "", "", "", ""]
         labels = ["Open", "Triage", "Diagnosis", "Resolution", "Resolved"]
 
         timeline_html = '<div class="timeline-container">'
@@ -927,21 +927,21 @@ def page_incidents():
                 timeline_html += f'<div class="timeline-connector {conn_class}"></div>'
         timeline_html += '</div>'
         st.markdown(timeline_html, unsafe_allow_html=True)
-        st.caption(f"Showing pipeline for: **{selected['id']}** — {selected['title']}")
+        st.caption(f"Showing pipeline for: **{selected['id']}** - {selected['title']}")
 
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: AGENT ACTIVITY FEED
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_agent_feed():
     c = get_colors()
-    st.markdown(f'<div class="section-header">📡 Real-Time Agent Activity</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Real-Time Agent Activity</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns([3, 1])
     with col2:
-        if st.button("🔄 Refresh Feed", key="refresh_feed"):
+        if st.button(" Refresh Feed", key="refresh_feed"):
             for _ in range(3):
                 st.session_state.agent_feed.insert(0, generate_agent_action())
             st.rerun()
@@ -976,13 +976,13 @@ def page_agent_feed():
         """, unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: KNOWLEDGE GRAPH
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_knowledge_graph():
     c = get_colors()
-    st.markdown(f'<div class="section-header">🔗 Incident Knowledge Graph</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Incident Knowledge Graph</div>', unsafe_allow_html=True)
     st.caption("Visual connections between related incidents, services, and root causes.")
 
     # Generate graph data
@@ -1041,7 +1041,7 @@ def page_knowledge_graph():
 
     # Central orchestrator node
     svg_elements.append(f'<circle cx="{center_x}" cy="{center_y}" r="24" fill="{c["accent"]}" opacity="0.9"/>')
-    svg_elements.append(f'<text x="{center_x}" y="{center_y+4}" text-anchor="middle" fill="white" font-size="10" font-weight="bold">🧠</text>')
+    svg_elements.append(f'<text x="{center_x}" y="{center_y+4}" text-anchor="middle" fill="white" font-size="10" font-weight="bold"></text>')
 
     svg_html = f"""
     <div style="text-align:center; padding: 20px; background:{c['surface']}; border-radius:12px; border:1px solid {c['border']};">
@@ -1049,10 +1049,10 @@ def page_knowledge_graph():
             {''.join(svg_elements)}
         </svg>
         <div style="margin-top:12px; font-size:0.8rem; color:{c['text_secondary']};">
-            <span style="color:#ef4444;">●</span> Critical &nbsp;
-            <span style="color:#f59e0b;">●</span> High &nbsp;
-            <span style="color:#3b82f6;">●</span> Medium &nbsp;
-            <span style="color:{c['accent']};">●</span> Services &nbsp;
+            <span style="color:#ef4444;"></span> Critical &nbsp;
+            <span style="color:#f59e0b;"></span> High &nbsp;
+            <span style="color:#3b82f6;"></span> Medium &nbsp;
+            <span style="color:{c['accent']};"></span> Services &nbsp;
             <span style="color:{c['warning']};">- -</span> Correlated
         </div>
     </div>
@@ -1063,20 +1063,20 @@ def page_knowledge_graph():
     st.markdown("<br>", unsafe_allow_html=True)
     cols = st.columns(3)
     with cols[0]:
-        st.markdown(render_metric_card("Connected Services", str(len(services)), "🔌"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Connected Services", str(len(services)), ""), unsafe_allow_html=True)
     with cols[1]:
-        st.markdown(render_metric_card("Correlated Incidents", str(random.randint(4, 8)), "🔗"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Correlated Incidents", str(random.randint(4, 8)), ""), unsafe_allow_html=True)
     with cols[2]:
-        st.markdown(render_metric_card("Root Causes Found", str(random.randint(2, 5)), "🎯"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Root Causes Found", str(random.randint(2, 5)), ""), unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: MCP SERVER LIVE QUERY PANEL
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_mcp_query():
     c = get_colors()
-    st.markdown(f'<div class="section-header">💬 MCP Server — Natural Language Query</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> MCP Server - Natural Language Query</div>', unsafe_allow_html=True)
     st.caption("Query your incident data using natural language via the Model Context Protocol.")
 
     # Chat interface
@@ -1094,7 +1094,7 @@ def page_mcp_query():
             else:
                 st.markdown(f"""
                 <div style="display:flex; justify-content:flex-start; margin:8px 0;">
-                    <div class="chat-bubble chat-agent">🧠 {msg['content']}</div>
+                    <div class="chat-bubble chat-agent"> {msg['content']}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -1111,7 +1111,7 @@ def page_mcp_query():
         st.rerun()
 
     # Suggested queries
-    st.markdown(f"<br><div style='color:{c['text_secondary']}; font-size:0.85rem; font-weight:600;'>💡 Try these queries:</div>", unsafe_allow_html=True)
+    st.markdown(f"<br><div style='color:{c['text_secondary']}; font-size:0.85rem; font-weight:600;'> Try these queries:</div>", unsafe_allow_html=True)
     suggestions = [
         "What are the most common incident types this week?",
         "Show me unresolved critical incidents",
@@ -1149,18 +1149,18 @@ def _generate_mcp_response(query: str) -> str:
 
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: HEALTH DASHBOARD
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_health():
     c = get_colors()
-    st.markdown(f'<div class="section-header">💚 System Health Dashboard</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> System Health Dashboard</div>', unsafe_allow_html=True)
 
     # Overall status
     st.markdown(f"""
     <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:16px 24px; display:flex; align-items:center; gap:12px; margin-bottom:24px;">
-        <div style="font-size:1.5rem;">✅</div>
+        <div style="font-size:1.5rem;"></div>
         <div>
             <div style="font-weight:700; color:{c['accent']};">All Systems Operational</div>
             <div style="font-size:0.8rem; color:{c['text_secondary']};">Last checked: {datetime.now(timezone.utc).strftime('%H:%M:%S UTC')}</div>
@@ -1169,7 +1169,7 @@ def page_health():
     """, unsafe_allow_html=True)
 
     # Agent heartbeats
-    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'>🤖 Agent Heartbeats</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'> Agent Heartbeats</div>", unsafe_allow_html=True)
     agent_health = [
         ("TriageAgent", "healthy", "23ms", "2.1k processed"),
         ("DiagnosisAgent", "healthy", "45ms", "1.8k processed"),
@@ -1180,7 +1180,7 @@ def page_health():
     cols = st.columns(4)
     for col, (name, status, latency, processed) in zip(cols, agent_health):
         with col:
-            status_icon = "🟢" if status == "healthy" else "🔴"
+            status_icon = "" if status == "healthy" else ""
             st.markdown(f"""
             <div class="metric-card" style="text-align:center;">
                 <div style="font-size:1.2rem;">{status_icon}</div>
@@ -1193,13 +1193,13 @@ def page_health():
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Database health
-    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'>🪳 CockroachDB Cluster Health</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'> CockroachDB Cluster Health</div>", unsafe_allow_html=True)
     db_cols = st.columns(4)
     db_metrics = [
-        ("Connections", "47/200", "🔌", None),
-        ("Query Latency (p99)", "12ms", "⚡", "↓3ms"),
-        ("Storage Used", "2.4 GB", "💾", None),
-        ("Uptime", "99.97%", "🕐", "+0.02%"),
+        ("Connections", "47/200", "", None),
+        ("Query Latency (p99)", "12ms", "", "↓3ms"),
+        ("Storage Used", "2.4 GB", "", None),
+        ("Uptime", "99.97%", "", "+0.02%"),
     ]
     for col, (label, value, icon, delta) in zip(db_cols, db_metrics):
         with col:
@@ -1212,22 +1212,22 @@ def page_health():
     st.caption("47 of 200 connections in use (23.5%)")
 
     # Region latencies
-    st.markdown(f"<div style='font-weight:600; color:{c['text']}; margin:16px 0 8px 0;'>🌍 Cross-Region Latencies</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-weight:600; color:{c['text']}; margin:16px 0 8px 0;'> Cross-Region Latencies</div>", unsafe_allow_html=True)
     latency_data = pd.DataFrame({
         "Route": ["us-east-1 → eu-west-1", "us-east-1 → ap-south-1", "eu-west-1 → ap-south-1"],
         "Latency": ["78ms", "195ms", "142ms"],
-        "Status": ["✅ Good", "⚠️ Elevated", "✅ Good"],
+        "Status": [" Good", " Elevated", " Good"],
     })
     st.dataframe(latency_data, use_container_width=True, hide_index=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: AUDIT LOG
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_audit():
     c = get_colors()
-    st.markdown(f'<div class="section-header">📋 Audit Log</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Audit Log</div>', unsafe_allow_html=True)
     st.caption("Every agent action and user interaction is recorded for compliance and debugging.")
 
     # Filters
@@ -1250,8 +1250,8 @@ def page_audit():
         <tbody>
     """
     for log in logs[:30]:
-        action_icons = {"viewed_incident": "👁️", "approved_runbook": "✅", "escalated": "⬆️", "changed_severity": "🔄", "exported_report": "📤", "incident_created": "🚨"}
-        icon = action_icons.get(log["action"], "📝")
+        action_icons = {"viewed_incident": "", "approved_runbook": "", "escalated": "", "changed_severity": "", "exported_report": "", "incident_created": ""}
+        icon = action_icons.get(log["action"], "")
         table_html += f"""
         <tr>
             <td style="font-family:'JetBrains Mono',monospace; font-size:0.8rem;">{log['ts'].strftime('%Y-%m-%d %H:%M:%S')}</td>
@@ -1266,13 +1266,13 @@ def page_audit():
     st.markdown(f"<div style='margin-top:16px; font-size:0.8rem; color:{c['text_secondary']};'>Showing {min(len(logs), 30)} of {len(logs)} entries</div>", unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: RBAC & ACCESS CONTROL
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_rbac():
     c = get_colors()
-    st.markdown(f'<div class="section-header">🔐 Role-Based Access Control</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Role-Based Access Control</div>', unsafe_allow_html=True)
     st.caption("IncidentMind enforces least-privilege access across all operations.")
 
     # Role cards
@@ -1285,7 +1285,7 @@ def page_rbac():
                     <div style="font-weight:700; color:{c['text']}; font-size:1.1rem;">{role['role']}</div>
                     <div style="margin-top:8px;">{perms_html}</div>
                 </div>
-                <div style="font-size:2rem; opacity:0.3;">🔑</div>
+                <div style="font-size:2rem; opacity:0.3;"></div>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -1294,21 +1294,21 @@ def page_rbac():
     st.markdown(f'<br><div style="font-weight:700; color:{c["text"]};">Access Matrix</div>', unsafe_allow_html=True)
     matrix_data = {
         "Resource": ["Incidents", "Runbooks", "Agent Config", "Audit Logs", "System Settings"],
-        "Admin": ["✅ Full", "✅ Full", "✅ Full", "✅ Full", "✅ Full"],
-        "SRE Lead": ["✅ Full", "✅ Execute", "👁️ View", "✅ Full", "❌ None"],
-        "Engineer": ["✅ R/W", "✅ Execute", "❌ None", "👁️ View", "❌ None"],
-        "Viewer": ["👁️ View", "👁️ View", "❌ None", "❌ None", "❌ None"],
+        "Admin": [" Full", " Full", " Full", " Full", " Full"],
+        "SRE Lead": [" Full", " Execute", " View", " Full", " None"],
+        "Engineer": [" R/W", " Execute", " None", " View", " None"],
+        "Viewer": [" View", " View", " None", " None", " None"],
     }
     st.dataframe(pd.DataFrame(matrix_data), use_container_width=True, hide_index=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: MULTI-REGION
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_regions():
     c = get_colors()
-    st.markdown(f'<div class="section-header">🌍 Multi-Region Architecture</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Multi-Region Architecture</div>', unsafe_allow_html=True)
     st.caption("CockroachDB's multi-region capabilities ensure data locality and low-latency access.")
 
     # Region cards
@@ -1320,7 +1320,7 @@ def page_regions():
         with col:
             st.markdown(f"""
             <div class="metric-card" style="border-color:{border_color}; border-width:2px; text-align:center;">
-                <div style="font-size:1.5rem; margin-bottom:8px;">🌐</div>
+                <div style="font-size:1.5rem; margin-bottom:8px;"></div>
                 <div style="font-weight:700; color:{c['text']};">{region['label']}</div>
                 <div style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:{c['text_secondary']}; margin:4px 0;">{region['name']}</div>
                 {badge}
@@ -1340,30 +1340,30 @@ def page_regions():
     # Replication topology
     st.markdown(f"""
     <div class="metric-card" style="margin-top:16px;">
-        <div style="font-weight:700; color:{c['text']}; margin-bottom:12px;">📊 Replication Topology</div>
+        <div style="font-weight:700; color:{c['text']}; margin-bottom:12px;"> Replication Topology</div>
         <div style="font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:{c['text_secondary']};">
-            ┌─────────────────────────────────────────────┐<br>
-            │  us-east-1 (Primary) ←──→ eu-west-1 (Read) │<br>
-            │       ↕                         ↕           │<br>
-            │           ap-south-1 (Read Replica)         │<br>
-            └─────────────────────────────────────────────┘<br>
             <br>
-            Replication Factor: 3 │ Survival Goal: Region │ Lease Preference: {st.session_state.region}
+              us-east-1 (Primary) ←→ eu-west-1 (Read) <br>
+                   ↕                         ↕           <br>
+                       ap-south-1 (Read Replica)         <br>
+            <br>
+            <br>
+            Replication Factor: 3  Survival Goal: Region  Lease Preference: {st.session_state.region}
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: RATE LIMITING & CIRCUIT BREAKER
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_rate_limit():
     c = get_colors()
-    st.markdown(f'<div class="section-header">🛡️ Rate Limiting & Circuit Breakers</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Rate Limiting & Circuit Breakers</div>', unsafe_allow_html=True)
 
     # Rate limit status
-    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'>📊 API Rate Limits</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'> API Rate Limits</div>", unsafe_allow_html=True)
 
     endpoints = [
         ("/api/v1/incidents", 847, 1000, "healthy"),
@@ -1389,13 +1389,13 @@ def page_rate_limit():
         """, unsafe_allow_html=True)
 
     # Circuit breakers
-    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'>⚡ Circuit Breaker States</div>", unsafe_allow_html=True)
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'> Circuit Breaker States</div>", unsafe_allow_html=True)
 
     breakers = [
         ("payment-service", "CLOSED", "Operating normally", c['accent']),
         ("auth-service", "CLOSED", "Operating normally", c['accent']),
         ("ml-inference", "HALF-OPEN", "Testing recovery (3/5 success)", c['warning']),
-        ("legacy-api", "OPEN", "Tripped 2m ago — 5 consecutive failures", c['danger']),
+        ("legacy-api", "OPEN", "Tripped 2m ago - 5 consecutive failures", c['danger']),
     ]
 
     for service, state, desc, color in breakers:
@@ -1415,13 +1415,13 @@ def page_rate_limit():
 
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: INCIDENT HEATMAP
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_heatmap():
     c = get_colors()
-    st.markdown(f'<div class="section-header">📊 Incident Heatmap</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Incident Heatmap</div>', unsafe_allow_html=True)
     st.caption("Visualize incident frequency by day and hour to identify patterns.")
 
     # Generate heatmap data (7 days x 24 hours)
@@ -1496,24 +1496,24 @@ def page_heatmap():
     st.markdown("<br>", unsafe_allow_html=True)
     cols = st.columns(3)
     with cols[0]:
-        st.markdown(render_metric_card("Peak Hour", "14:00-15:00", "🕐", "Deployment window"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Peak Hour", "14:00-15:00", "", "Deployment window"), unsafe_allow_html=True)
     with cols[1]:
-        st.markdown(render_metric_card("Quietest Day", "Sunday", "😴", "82% fewer incidents"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Quietest Day", "Sunday", "", "82% fewer incidents"), unsafe_allow_html=True)
     with cols[2]:
-        st.markdown(render_metric_card("Weekly Total", str(sum(sum(row) for row in heatmap_data)), "📊", None), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Weekly Total", str(sum(sum(row) for row in heatmap_data)), "", None), unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: RESOLUTION PLAYBOOK LIBRARY
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_playbooks():
     c = get_colors()
-    st.markdown(f'<div class="section-header">📖 Resolution Playbook Library</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Resolution Playbook Library</div>', unsafe_allow_html=True)
     st.caption("Searchable library of automated resolution strategies learned from past incidents.")
 
     # Search
-    search = st.text_input("🔍 Search playbooks...", key="pb_search", placeholder="e.g., memory, connection, SSL...")
+    search = st.text_input(" Search playbooks...", key="pb_search", placeholder="e.g., memory, connection, SSL...")
 
     playbooks = RESOLUTION_PLAYBOOKS
     if search:
@@ -1527,7 +1527,7 @@ def page_playbooks():
         <div class="metric-card">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div style="flex:1;">
-                    <div style="font-weight:700; color:{c['text']}; font-size:1rem; margin-bottom:8px;">📋 {pb['name']}</div>
+                    <div style="font-weight:700; color:{c['text']}; font-size:1rem; margin-bottom:8px;"> {pb['name']}</div>
                     {steps_html}
                 </div>
                 <div style="text-align:center; min-width:80px;">
@@ -1540,21 +1540,21 @@ def page_playbooks():
         """, unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: AGENT PERFORMANCE METRICS
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_performance():
     c = get_colors()
-    st.markdown(f'<div class="section-header">⚡ Agent Performance Metrics</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Agent Performance Metrics</div>', unsafe_allow_html=True)
 
     # Key metrics
     cols = st.columns(4)
     perf_metrics = [
-        ("Avg Time-to-Triage", "1.2s", "⚡", "↓0.3s from last week"),
-        ("Avg Diagnosis Time", "4.7s", "🧠", "↓1.1s improvement"),
-        ("Resolution Accuracy", "94.2%", "🎯", "+2.1% this month"),
-        ("Incidents/Hour", "47", "📊", "+12% capacity"),
+        ("Avg Time-to-Triage", "1.2s", "", "↓0.3s from last week"),
+        ("Avg Diagnosis Time", "4.7s", "", "↓1.1s improvement"),
+        ("Resolution Accuracy", "94.2%", "", "+2.1% this month"),
+        ("Incidents/Hour", "47", "", "+12% capacity"),
     ]
     for col, (label, value, icon, delta) in zip(cols, perf_metrics):
         with col:
@@ -1563,7 +1563,7 @@ def page_performance():
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Performance over time chart (using native Streamlit)
-    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>📈 Performance Trend (Last 30 Days)</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> Performance Trend (Last 30 Days)</div>", unsafe_allow_html=True)
 
     # Generate trend data
     dates = pd.date_range(end=datetime.now(), periods=30, freq='D')
@@ -1577,7 +1577,7 @@ def page_performance():
     st.line_chart(perf_df, use_container_width=True)
 
     # Per-agent breakdown
-    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>🤖 Per-Agent Breakdown</div>", unsafe_allow_html=True)
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> Per-Agent Breakdown</div>", unsafe_allow_html=True)
     agent_perf = pd.DataFrame({
         "Agent": AGENT_NAMES,
         "Avg Latency": ["1.2s", "4.7s", "8.3s", "2.1s"],
@@ -1589,13 +1589,13 @@ def page_performance():
 
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: EXPORT & SHARING
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_export():
     c = get_colors()
-    st.markdown(f'<div class="section-header">📤 Export & Sharing</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Export & Sharing</div>', unsafe_allow_html=True)
     st.caption("Export incident data, generate PDF reports, and share with your team.")
 
     # Export options
@@ -1603,59 +1603,59 @@ def page_export():
     with cols[0]:
         st.markdown(f"""
         <div class="metric-card" style="text-align:center;">
-            <div style="font-size:2rem; margin-bottom:12px;">📄</div>
+            <div style="font-size:2rem; margin-bottom:12px;"></div>
             <div style="font-weight:700; color:{c['text']};">PDF Report</div>
             <div style="font-size:0.8rem; color:{c['text_secondary']}; margin-top:8px;">Full incident summary with charts and timeline</div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("📄 Generate PDF", key="export_pdf", use_container_width=True):
-            st.success("✅ PDF report generated! (demo_report_2024.pdf)")
+        if st.button(" Generate PDF", key="export_pdf", use_container_width=True):
+            st.success(" PDF report generated! (demo_report_2024.pdf)")
 
     with cols[1]:
         st.markdown(f"""
         <div class="metric-card" style="text-align:center;">
-            <div style="font-size:2rem; margin-bottom:12px;">📊</div>
+            <div style="font-size:2rem; margin-bottom:12px;"></div>
             <div style="font-weight:700; color:{c['text']};">CSV Export</div>
             <div style="font-size:0.8rem; color:{c['text_secondary']}; margin-top:8px;">Raw incident data for custom analysis</div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("📊 Export CSV", key="export_csv", use_container_width=True):
+        if st.button(" Export CSV", key="export_csv", use_container_width=True):
             df = pd.DataFrame([{
                 "id": i["id"], "title": i["title"], "severity": i["severity"],
                 "status": i["status"], "service": i["service"], "mttr": i["mttr_minutes"]
             } for i in st.session_state.incidents])
             csv = df.to_csv(index=False)
-            st.download_button("⬇️ Download CSV", csv, "incidents.csv", "text/csv", key="dl_csv")
+            st.download_button(" Download CSV", csv, "incidents.csv", "text/csv", key="dl_csv")
 
     with cols[2]:
         st.markdown(f"""
         <div class="metric-card" style="text-align:center;">
-            <div style="font-size:2rem; margin-bottom:12px;">🔔</div>
+            <div style="font-size:2rem; margin-bottom:12px;"></div>
             <div style="font-weight:700; color:{c['text']};">Notifications</div>
             <div style="font-size:0.8rem; color:{c['text_secondary']}; margin-top:8px;">Send incident summaries to Slack/PagerDuty</div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("🔔 Send Notification", key="send_notif", use_container_width=True):
-            st.success("✅ Notification sent to #incidents-critical channel!")
+        if st.button(" Send Notification", key="send_notif", use_container_width=True):
+            st.success(" Notification sent to #incidents-critical channel!")
 
     # Sharing links (mock)
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>🔗 Shareable Links</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> Shareable Links</div>", unsafe_allow_html=True)
     st.code("https://incidentmind.app/share/report/2024-07-21-abc123", language="text")
     st.caption("Link expires in 7 days. Viewer access only.")
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: CONFIDENCE CALIBRATION
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_calibration():
     c = get_colors()
-    st.markdown(f'<div class="section-header">🎯 Confidence Calibration</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Confidence Calibration</div>', unsafe_allow_html=True)
     st.caption("Human feedback loop to improve agent accuracy over time.")
 
     # Show recent resolutions for feedback
-    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'>Recent Agent Decisions — Rate Quality:</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'>Recent Agent Decisions - Rate Quality:</div>", unsafe_allow_html=True)
 
     decisions = [
         {"incident": "INC-A3F2B1C4", "decision": "Root cause: Connection pool exhaustion due to long-running queries. Recommended: Increase pool size to 200 and add query timeout of 30s.", "confidence": 0.94},
@@ -1681,11 +1681,11 @@ def page_calibration():
 
         col1, col2, col3 = st.columns([1, 1, 4])
         with col1:
-            if st.button("👍 Correct", key=f"up_{i}"):
+            if st.button(" Correct", key=f"up_{i}"):
                 st.session_state.confidence_votes["up"] += 1
                 st.success("Thanks! Positive feedback recorded.")
         with col2:
-            if st.button("👎 Wrong", key=f"down_{i}"):
+            if st.button(" Wrong", key=f"down_{i}"):
                 st.session_state.confidence_votes["down"] += 1
                 st.warning("Feedback noted. Agent will be recalibrated.")
 
@@ -1696,20 +1696,20 @@ def page_calibration():
 
     cols = st.columns(3)
     with cols[0]:
-        st.markdown(render_metric_card("Total Feedback", str(total_votes), "📝"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Total Feedback", str(total_votes), ""), unsafe_allow_html=True)
     with cols[1]:
-        st.markdown(render_metric_card("Human Approval", f"{accuracy:.0f}%", "👍"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Human Approval", f"{accuracy:.0f}%", ""), unsafe_allow_html=True)
     with cols[2]:
-        st.markdown(render_metric_card("Calibration Score", f"{min(accuracy + 5, 99):.0f}%", "🎯"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Calibration Score", f"{min(accuracy + 5, 99):.0f}%", ""), unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: PREDICTIVE ALERTS
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_predictions():
     c = get_colors()
-    st.markdown(f'<div class="section-header">🔮 Predictive Alerts</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Predictive Alerts</div>', unsafe_allow_html=True)
     st.caption("Pattern-based predictions using historical incident data and embeddings.")
 
     # Active predictions
@@ -1730,7 +1730,7 @@ def page_predictions():
         <div class="metric-card" style="border-left:4px solid {prob_color};">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div style="flex:1;">
-                    <div style="font-weight:700; color:{c['text']}; font-size:1rem;">⚠️ {pred['title']}</div>
+                    <div style="font-weight:700; color:{c['text']}; font-size:1rem;"> {pred['title']}</div>
                     <div style="font-size:0.8rem; color:{c['text_secondary']}; margin:4px 0;">
                         <code>{pred['service']}</code> · ETA: {pred['eta']}
                     </div>
@@ -1750,13 +1750,13 @@ def page_predictions():
         """, unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: MULTI-AGENT CHAT
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_multi_chat():
     c = get_colors()
-    st.markdown(f'<div class="section-header">🤖 Multi-Agent Discussion</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Multi-Agent Discussion</div>', unsafe_allow_html=True)
     st.caption("Watch agents collaborate to diagnose and resolve incidents in real-time.")
 
     # Simulate or display conversation
@@ -1767,7 +1767,7 @@ def page_multi_chat():
             {"agent": "DiagnosisAgent", "msg": "Root cause analysis complete. The connection pool is configured at max=100 but we're seeing 97 active connections. Long-running analytics queries (avg 12s) are not releasing connections fast enough during peak load.", "ts": "10:23:08"},
             {"agent": "ResolutionAgent", "msg": "I recommend the 'DB Connection Pool Recovery' playbook (94% success rate). Steps: 1) Kill idle connections older than 30s, 2) Increase pool to 200, 3) Add query timeout of 5s for analytics. Shall I execute?", "ts": "10:23:12"},
             {"agent": "TriageAgent", "msg": "Approved. Confidence score: 0.94. Executing playbook. I'll monitor for 5 minutes post-execution and auto-close if connection count drops below 60%.", "ts": "10:23:14"},
-            {"agent": "ResolutionAgent", "msg": "✅ Playbook executed successfully. Connection pool now at 34/200 (17%). Downstream services recovering. MTTR: 13 seconds (automated).", "ts": "10:23:27"},
+            {"agent": "ResolutionAgent", "msg": " Playbook executed successfully. Connection pool now at 34/200 (17%). Downstream services recovering. MTTR: 13 seconds (automated).", "ts": "10:23:27"},
         ]
 
     agent_colors = {
@@ -1777,15 +1777,15 @@ def page_multi_chat():
         "CorrelatorAgent": "#a855f7",
     }
     agent_icons = {
-        "TriageAgent": "🔍",
-        "DiagnosisAgent": "🧠",
-        "ResolutionAgent": "🛠️",
-        "CorrelatorAgent": "🔗",
+        "TriageAgent": "",
+        "DiagnosisAgent": "",
+        "ResolutionAgent": "",
+        "CorrelatorAgent": "",
     }
 
     for msg in st.session_state.multi_agent_chat:
         color = agent_colors.get(msg["agent"], c['accent'])
-        icon = agent_icons.get(msg["agent"], "🤖")
+        icon = agent_icons.get(msg["agent"], "")
         st.markdown(f"""
         <div style="display:flex; gap:12px; margin:12px 0; padding:12px 16px; background:{c['surface']}; border-radius:12px; border:1px solid {c['border']}; border-left:3px solid {color};">
             <div style="font-size:1.5rem;">{icon}</div>
@@ -1800,7 +1800,7 @@ def page_multi_chat():
         """, unsafe_allow_html=True)
 
     # Simulate new message
-    if st.button("🔄 Simulate Agent Discussion", key="sim_chat"):
+    if st.button(" Simulate Agent Discussion", key="sim_chat"):
         new_msgs = [
             {"agent": random.choice(AGENT_NAMES), "msg": random.choice(AGENT_ACTIONS) + f" for incident INC-{str(uuid.uuid4())[:6].upper()}.", "ts": datetime.now(timezone.utc).strftime("%H:%M:%S")},
         ]
@@ -1809,13 +1809,13 @@ def page_multi_chat():
 
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: RUNBOOK EXECUTION DRY RUN
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_runbook():
     c = get_colors()
-    st.markdown(f'<div class="section-header">▶️ Runbook Execution — Dry Run</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Runbook Execution - Dry Run</div>', unsafe_allow_html=True)
     st.caption("Preview and approve automated resolution commands before execution.")
 
     # Select playbook
@@ -1825,13 +1825,13 @@ def page_runbook():
 
     st.markdown(f"""
     <div class="metric-card">
-        <div style="font-weight:700; color:{c['text']}; margin-bottom:12px;">📋 {playbook['name']}</div>
+        <div style="font-weight:700; color:{c['text']}; margin-bottom:12px;"> {playbook['name']}</div>
         <div style="font-size:0.85rem; color:{c['text_secondary']}; margin-bottom:4px;">Success Rate: <span style="color:{c['accent']}; font-weight:700;">{playbook['success_rate']}%</span></div>
     </div>
     """, unsafe_allow_html=True)
 
     # Command preview with approval
-    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>🖥️ Commands to Execute:</div>", unsafe_allow_html=True)
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> Commands to Execute:</div>", unsafe_allow_html=True)
 
     mock_commands = {
         "DB Connection Pool Recovery": [
@@ -1854,7 +1854,7 @@ def page_runbook():
         step_key = f"{selected_pb}_{i}"
         approved = st.session_state.runbook_approvals.get(step_key, False)
 
-        status_icon = "✅" if approved else "⏳"
+        status_icon = "" if approved else "⏳"
         border = c['accent'] if approved else c['border']
 
         st.markdown(f"""
@@ -1868,7 +1868,7 @@ def page_runbook():
         """, unsafe_allow_html=True)
 
         if not approved:
-            if st.button(f"✅ Approve Step {i+1}", key=f"approve_{step_key}"):
+            if st.button(f" Approve Step {i+1}", key=f"approve_{step_key}"):
                 st.session_state.runbook_approvals[step_key] = True
                 st.session_state.audit_log.insert(0, {
                     "ts": datetime.now(timezone.utc),
@@ -1881,19 +1881,19 @@ def page_runbook():
     # Execute all
     all_approved = all(st.session_state.runbook_approvals.get(f"{selected_pb}_{i}", False) for i in range(len(commands)))
     if all_approved:
-        st.success("✅ All steps approved!")
-        if st.button("🚀 Execute Runbook", key="execute_rb", use_container_width=True):
+        st.success(" All steps approved!")
+        if st.button(" Execute Runbook", key="execute_rb", use_container_width=True):
             st.balloons()
-            st.success(f"🎉 Runbook '{selected_pb}' executed successfully! MTTR: {random.randint(8, 30)}s")
+            st.success(f" Runbook '{selected_pb}' executed successfully! MTTR: {random.randint(8, 30)}s")
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: INCIDENT DEDUPLICATION
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_dedup():
     c = get_colors()
-    st.markdown(f'<div class="section-header">🔄 Incident Deduplication</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Incident Deduplication</div>', unsafe_allow_html=True)
     st.caption("AI-powered detection of duplicate and related incidents using vector similarity.")
 
     # Generate dedup groups
@@ -1928,11 +1928,11 @@ def page_dedup():
     total_dupes = sum(len(g["duplicates"]) for g in dedup_groups)
     cols = st.columns(3)
     with cols[0]:
-        st.markdown(render_metric_card("Dedup Groups", str(len(dedup_groups)), "🔄"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Dedup Groups", str(len(dedup_groups)), ""), unsafe_allow_html=True)
     with cols[1]:
-        st.markdown(render_metric_card("Duplicates Found", str(total_dupes), "🔍"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Duplicates Found", str(total_dupes), ""), unsafe_allow_html=True)
     with cols[2]:
-        st.markdown(render_metric_card("Noise Reduced", f"{int(total_dupes/(total_dupes+len(dedup_groups))*100)}%", "📉"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Noise Reduced", f"{int(total_dupes/(total_dupes+len(dedup_groups))*100)}%", ""), unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -1941,7 +1941,7 @@ def page_dedup():
         st.markdown(f"""
         <div class="metric-card">
             <div style="font-weight:700; color:{c['text']}; margin-bottom:8px;">
-                <span style="color:{c['accent']}; font-family:'JetBrains Mono',monospace;">{group['primary']}</span> — {group['title']}
+                <span style="color:{c['accent']}; font-family:'JetBrains Mono',monospace;">{group['primary']}</span> - {group['title']}
             </div>
             <div style="font-size:0.8rem; color:{c['text_secondary']}; margin-bottom:12px;">Primary incident • {len(group['duplicates'])} duplicate(s) merged</div>
         """, unsafe_allow_html=True)
@@ -1959,21 +1959,21 @@ def page_dedup():
         st.markdown("</div>", unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: MTTR DASHBOARD
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_mttr():
     c = get_colors()
-    st.markdown(f'<div class="section-header">⏱️ Mean Time to Resolve (MTTR)</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">⏱ Mean Time to Resolve (MTTR)</div>', unsafe_allow_html=True)
 
     # Key MTTR metrics
     cols = st.columns(4)
     mttr_metrics = [
-        ("Overall MTTR", "8.3 min", "⏱️", "↓23% from last month"),
-        ("Critical MTTR", "4.1 min", "🚨", "↓31% improvement"),
-        ("Automated Resolution", "13 sec", "🤖", "87% of incidents"),
-        ("Human Escalation", "34 min", "👤", "13% of incidents"),
+        ("Overall MTTR", "8.3 min", "⏱", "↓23% from last month"),
+        ("Critical MTTR", "4.1 min", "", "↓31% improvement"),
+        ("Automated Resolution", "13 sec", "", "87% of incidents"),
+        ("Human Escalation", "34 min", "", "13% of incidents"),
     ]
     for col, (label, value, icon, delta) in zip(cols, mttr_metrics):
         with col:
@@ -1982,7 +1982,7 @@ def page_mttr():
     st.markdown("<br>", unsafe_allow_html=True)
 
     # MTTR Trend Chart
-    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>📈 MTTR Trend (Last 12 Weeks)</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> MTTR Trend (Last 12 Weeks)</div>", unsafe_allow_html=True)
     weeks = pd.date_range(end=datetime.now(), periods=12, freq='W')
     mttr_df = pd.DataFrame({
         'Week': weeks,
@@ -1993,7 +1993,7 @@ def page_mttr():
     st.line_chart(mttr_df, use_container_width=True)
 
     # MTTR by severity
-    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>📊 MTTR by Severity</div>", unsafe_allow_html=True)
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> MTTR by Severity</div>", unsafe_allow_html=True)
     severity_mttr = pd.DataFrame({
         "Severity": ["Critical", "High", "Medium", "Warning"],
         "Avg MTTR (min)": [4.1, 8.7, 15.2, 22.8],
@@ -2003,7 +2003,7 @@ def page_mttr():
     st.dataframe(severity_mttr, use_container_width=True, hide_index=True)
 
     # MTTR by service
-    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>🔧 MTTR by Service (Top 5)</div>", unsafe_allow_html=True)
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> MTTR by Service (Top 5)</div>", unsafe_allow_html=True)
     service_mttr = pd.DataFrame({
         "Service": ["payment-service", "gateway-api", "ml-inference", "auth-service", "data-pipeline"],
         "Avg MTTR": ["5.2 min", "7.1 min", "12.4 min", "3.8 min", "9.6 min"],
@@ -2013,13 +2013,13 @@ def page_mttr():
 
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: TOP FAILURE CATEGORIES
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_categories():
     c = get_colors()
-    st.markdown(f'<div class="section-header">📈 Top Failure Categories</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Top Failure Categories</div>', unsafe_allow_html=True)
 
     # Category data
     categories = [
@@ -2053,7 +2053,7 @@ def page_categories():
     cols = st.columns(2)
 
     with cols[0]:
-        st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>📊 Incidents by Service</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> Incidents by Service</div>", unsafe_allow_html=True)
         service_counts = {}
         for inc in st.session_state.incidents:
             service_counts[inc["service"]] = service_counts.get(inc["service"], 0) + 1
@@ -2062,7 +2062,7 @@ def page_categories():
         st.bar_chart(svc_df.set_index("Service"), use_container_width=True)
 
     with cols[1]:
-        st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>📊 Severity Distribution</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> Severity Distribution</div>", unsafe_allow_html=True)
         sev_counts = {}
         for inc in st.session_state.incidents:
             sev_counts[inc["severity"]] = sev_counts.get(inc["severity"], 0) + 1
@@ -2070,7 +2070,7 @@ def page_categories():
         st.bar_chart(sev_df.set_index("Severity"), use_container_width=True)
 
     # Trend comparison
-    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>📈 Category Trends (4 Weeks)</div>", unsafe_allow_html=True)
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> Category Trends (4 Weeks)</div>", unsafe_allow_html=True)
     trend_df = pd.DataFrame({
         'Week': pd.date_range(end=datetime.now(), periods=4, freq='W'),
         'Database': [12, 10, 8, 4],
@@ -2082,19 +2082,19 @@ def page_categories():
     st.line_chart(trend_df, use_container_width=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # PAGE: AGENT ROI CALCULATOR
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 def page_roi():
     c = get_colors()
-    st.markdown(f'<div class="section-header">💰 Agent ROI Calculator</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header"> Agent ROI Calculator</div>', unsafe_allow_html=True)
     st.caption("Calculate the return on investment from AI-automated incident response.")
 
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:12px;'>📊 Input Parameters</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:12px;'> Input Parameters</div>", unsafe_allow_html=True)
         incidents_per_month = st.slider("Incidents per Month", 50, 500, 200, key="roi_incidents")
         avg_manual_mttr = st.slider("Avg Manual MTTR (minutes)", 15, 120, 45, key="roi_manual_mttr")
         engineer_hourly_cost = st.slider("Engineer Hourly Cost ($)", 50, 250, 150, key="roi_cost")
@@ -2102,7 +2102,7 @@ def page_roi():
         ai_mttr = st.slider("AI Agent MTTR (minutes)", 1, 15, 3, key="roi_ai_mttr")
 
     with col2:
-        st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:12px;'>💡 ROI Results</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:12px;'> ROI Results</div>", unsafe_allow_html=True)
 
         # Calculations
         manual_hours_per_month = (incidents_per_month * avg_manual_mttr) / 60
@@ -2121,17 +2121,17 @@ def page_roi():
 
         time_saved_hours = manual_hours_per_month - (ai_hours + remaining_manual_hours)
 
-        st.markdown(render_metric_card("Monthly Savings", f"${savings_per_month:,.0f}", "💰", f"${savings_per_year:,.0f}/year"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Monthly Savings", f"${savings_per_month:,.0f}", "", f"${savings_per_year:,.0f}/year"), unsafe_allow_html=True)
         st.markdown(render_metric_card("Hours Saved/Month", f"{time_saved_hours:.0f}h", "⏰", f"{time_saved_hours*12:.0f}h/year"), unsafe_allow_html=True)
-        st.markdown(render_metric_card("ROI", f"{roi_pct:.0f}%", "📈", "On platform investment"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("ROI", f"{roi_pct:.0f}%", "", "On platform investment"), unsafe_allow_html=True)
 
     # Comparison table
-    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>📊 Before vs After Comparison</div>", unsafe_allow_html=True)
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'> Before vs After Comparison</div>", unsafe_allow_html=True)
     comparison = pd.DataFrame({
         "Metric": ["Incidents/Month", "Avg MTTR", "Engineer Hours/Month", "Monthly Cost", "Auto-Resolution Rate"],
         "Before (Manual)": [str(incidents_per_month), f"{avg_manual_mttr} min", f"{manual_hours_per_month:.0f}h", f"${manual_cost_per_month:,.0f}", "0%"],
         "After (AI Agents)": [str(incidents_per_month), f"{ai_mttr} min (automated)", f"{remaining_manual_hours:.0f}h", f"${new_cost:,.0f}", f"{automation_rate}%"],
-        "Improvement": ["—", f"↓{avg_manual_mttr - ai_mttr} min", f"↓{time_saved_hours:.0f}h", f"↓${savings_per_month:,.0f}", f"+{automation_rate}%"],
+        "Improvement": ["-", f"↓{avg_manual_mttr - ai_mttr} min", f"↓{time_saved_hours:.0f}h", f"↓${savings_per_month:,.0f}", f"+{automation_rate}%"],
     })
     st.dataframe(comparison, use_container_width=True, hide_index=True)
 
@@ -2148,9 +2148,9 @@ def page_roi():
         """, unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════
+# 
 # MAIN ROUTER
-# ═══════════════════════════════════════════════════════════════════
+# 
 
 PAGE_MAP = {
     "home": page_home,
@@ -2184,12 +2184,12 @@ if current in PAGE_MAP:
 else:
     page_home()
 
-# ─── Footer ──────────────────────────────────────────────────────
+#  Footer 
 c = get_colors()
 st.markdown(f"""
 <div style="margin-top:64px; padding:24px; text-align:center; border-top:1px solid {c['border']};">
     <div style="font-size:0.8rem; color:{c['text_secondary']};">
-        🧠 IncidentMind — Multi-Agent DevOps Incident Responder<br>
+         IncidentMind - Multi-Agent DevOps Incident Responder<br>
         Built with CockroachDB • AWS Bedrock • LangChain • MCP Protocol<br>
         <span style="font-family:'JetBrains Mono',monospace;">CockroachDB × AWS Hackathon 2024</span>
     </div>
