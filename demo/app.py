@@ -651,7 +651,7 @@ def render_login_page():
         </p>
 
         <div style="display:flex; justify-content:center; gap:16px; margin-bottom:20px;">
-            <span id="cta-start" style="background:#111; color:white; padding:16px 36px; border-radius:100px; font-size:1rem; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">Get started &#8594;</span>
+            <span id="cta-start" style="background:{c['text']}; color:{c['bg']}; padding:16px 36px; border-radius:100px; font-size:1rem; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">Get started &#8594;</span>
             <span style="background:{c['surface']}; color:{c['text']}; padding:16px 36px; border-radius:100px; font-size:1rem; font-weight:500; border:1px solid {c['border']}; cursor:pointer;">See live demo</span>
         </div>
 
@@ -920,6 +920,13 @@ def render_sidebar():
 
 # Render login or main app
 if not st.session_state.logged_in:
+    # Hide sidebar on login page
+    st.markdown("""
+    <style>
+        section[data-testid="stSidebar"] {display: none;}
+        .stApp > header {display: none;}
+    </style>
+    """, unsafe_allow_html=True)
     render_login_page()
     st.stop()
 
