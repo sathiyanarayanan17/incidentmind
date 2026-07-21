@@ -9,6 +9,7 @@ import json
 from datetime import datetime, timezone
 
 import streamlit as st
+import psycopg.rows
 
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -236,19 +237,7 @@ def main():
                 format_func=lambda x: f"[{x['severity']}] {x['title']}",
             )
             if selected:
-                with orchestrator.memory.conn.cursor() as cur:
-                    cur.execute(
-                        """
-                        SELECT am.*, ag.agent_type
-                        FROM agent_memory am
-                        JOIN agent_state ag ON ag.agent_id = am.agent_id
-                        WHERE am.incident_id = %s
-                        ORDER BY am.created_at ASC
-                        """,
-                        (str(selected["incident_id"]),),
-                    )
-                    import psycopg2.extras
-                    cur = orchestrator.memory.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+                with orchestrator.memory.conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
                     cur.execute(
                         """
                         SELECT am.memory_type, am.content, am.created_at, ag.agent_type

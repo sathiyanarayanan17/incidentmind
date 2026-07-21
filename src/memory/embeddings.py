@@ -11,8 +11,8 @@ import json
 from typing import Optional
 
 import boto3
-import psycopg2
-import psycopg2.extras
+import psycopg
+from psycopg.rows import dict_row
 from dotenv import load_dotenv
 import structlog
 
@@ -39,8 +39,7 @@ class EmbeddingManager:
     def conn(self):
         """Lazy connection with auto-reconnect."""
         if self._conn is None or self._conn.closed:
-            self._conn = psycopg2.connect(self.connection_url)
-            self._conn.autocommit = False
+            self._conn = psycopg.connect(self.connection_url, autocommit=False)
         return self._conn
 
     def close(self):
@@ -186,7 +185,7 @@ class EmbeddingManager:
             """
             params = (embedding_str, embedding_str, max_distance, limit)
 
-        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        with self.conn.cursor(row_factory=dict_row) as cur:
             cur.execute(query, params)
             rows = cur.fetchall()
 
@@ -214,7 +213,7 @@ class EmbeddingManager:
         similar past incidents (excluding itself).
         """
         # Get the incident's symptom embeddings
-        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        with self.conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 """
                 SELECT content_text FROM incident_embeddings

@@ -9,17 +9,15 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-import psycopg2
-import psycopg2.extras
+import psycopg
+from psycopg.rows import dict_row
+from psycopg.types.json import Jsonb
 from dotenv import load_dotenv
 import structlog
 
 load_dotenv()
 
 logger = structlog.get_logger(__name__)
-
-# Register UUID adapter
-psycopg2.extras.register_uuid()
 
 
 class CockroachMemory:
@@ -35,8 +33,7 @@ class CockroachMemory:
     def conn(self):
         """Lazy connection with auto-reconnect."""
         if self._conn is None or self._conn.closed:
-            self._conn = psycopg2.connect(self.connection_url)
-            self._conn.autocommit = False
+            self._conn = psycopg.connect(self.connection_url, autocommit=False)
         return self._conn
 
     def close(self):
@@ -136,7 +133,7 @@ class CockroachMemory:
                 VALUES (%s, %s, %s, 'open', %s, %s)
                 RETURNING incident_id
                 """,
-                (incident_id, title, severity, source, psycopg2.extras.Json(symptoms or {})),
+                (incident_id, title, severity, source, Jsonb(symptoms or {})),
             )
             result = cur.fetchone()
         self.conn.commit()
@@ -164,28 +161,28 @@ class CockroachMemory:
 
     def get_incident(self, incident_id: str) -> Optional[dict]:
         """Get a single incident by ID."""
-        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        with self.conn.cursor(row_factory=dict_row) as cur:
             cur.execute("SELECT * FROM incidents WHERE incident_id = %s", (incident_id,))
             row = cur.fetchone()
-        return dict(row) if row else None
+        return row
 
     def get_open_incidents(self) -> list:
         """Get all open incidents."""
-        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        with self.conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 "SELECT * FROM incidents WHERE status != 'resolved' ORDER BY severity ASC, created_at DESC"
             )
             rows = cur.fetchall()
-        return [dict(r) for r in rows]
+        return rows
 
     def get_recent_incidents(self, limit: int = 20) -> list:
         """Get recent incidents."""
-        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        with self.conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 "SELECT * FROM incidents ORDER BY created_at DESC LIMIT %s", (limit,)
             )
             rows = cur.fetchall()
-        return [dict(r) for r in rows]
+        return rows
 
     # ─── Agent State Operations ───────────────────────────────────────
 
@@ -215,16 +212,16 @@ class CockroachMemory:
                 SET status = %s, current_task = %s, last_heartbeat = now()
                 WHERE agent_id = %s
                 """,
-                (status, psycopg2.extras.Json(current_task), agent_id),
+                (status, Jsonb(current_task) if current_task else None, agent_id),
             )
         self.conn.commit()
 
     def get_agent_state(self, agent_id: str) -> Optional[dict]:
         """Get current state of an agent."""
-        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        with self.conn.cursor(row_factory=dict_row) as cur:
             cur.execute("SELECT * FROM agent_state WHERE agent_id = %s", (agent_id,))
             row = cur.fetchone()
-        return dict(row) if row else None
+        return row
 
     def heartbeat(self, agent_id: str):
         """Update agent heartbeat timestamp."""
@@ -252,14 +249,14 @@ class CockroachMemory:
                 INSERT INTO agent_memory (id, agent_id, incident_id, memory_type, content)
                 VALUES (%s, %s, %s, %s, %s)
                 """,
-                (memory_id, agent_id, incident_id, memory_type, psycopg2.extras.Json(content)),
+                (memory_id, agent_id, incident_id, memory_type, Jsonb(content)),
             )
         self.conn.commit()
         return memory_id
 
     def get_agent_memories(self, agent_id: str, incident_id: Optional[str] = None) -> list:
         """Get reasoning traces for an agent, optionally filtered by incident."""
-        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        with self.conn.cursor(row_factory=dict_row) as cur:
             if incident_id:
                 cur.execute(
                     """
@@ -275,7 +272,7 @@ class CockroachMemory:
                     (agent_id,),
                 )
             rows = cur.fetchall()
-        return [dict(r) for r in rows]
+        return rows
 
     # ─── Correlation Patterns ─────────────────────────────────────────
 
@@ -287,14 +284,14 @@ class CockroachMemory:
                 INSERT INTO correlation_patterns (pattern_name, conditions, suggested_action, confidence)
                 VALUES (%s, %s, %s, %s)
                 """,
-                (pattern_name, psycopg2.extras.Json(conditions), suggested_action, confidence),
+                (pattern_name, Jsonb(conditions), suggested_action, confidence),
             )
         self.conn.commit()
         logger.info("pattern_stored", pattern_name=pattern_name, confidence=confidence)
 
     def get_patterns(self, min_confidence: float = 0.0) -> list:
         """Get correlation patterns above a confidence threshold."""
-        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        with self.conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 """
                 SELECT * FROM correlation_patterns
@@ -304,7 +301,7 @@ class CockroachMemory:
                 (min_confidence,),
             )
             rows = cur.fetchall()
-        return [dict(r) for r in rows]
+        return rows
 
     def increment_pattern(self, pattern_id: str):
         """Increment times_seen for a pattern."""
