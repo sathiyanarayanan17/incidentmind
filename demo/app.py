@@ -611,18 +611,37 @@ def inject_css():
 inject_css()
 
 
-#  Login Page 
+#  Landing Page (Front Page) 
 
-def render_login_page():
+def render_landing_page():
     c = get_colors()
-    # Top navigation bar
-    st.markdown(f"""<div style="display:flex; align-items:center; justify-content:space-between; padding:16px 40px; background:{c['surface']}; border:1px solid {c['border']}; border-radius:100px; margin:16px auto; max-width:900px;">
-<div style="font-size:1.2rem; font-weight:900; color:{c['text']}; letter-spacing:-0.5px;">IncidentMind</div>
-<div style="display:flex; align-items:center; gap:32px; font-size:0.9rem; color:{c['text_secondary']};"><span>Features</span><span>How it Works</span><span>Architecture</span><span>Docs</span></div>
-<div style="width:32px; height:32px; background:{c['accent']}; border-radius:50%; display:flex; align-items:center; justify-content:center;"><span style="color:white; font-weight:700; font-size:12px;">D</span></div>
-</div>""", unsafe_allow_html=True)
 
-    # Hero section
+    # Top navigation bar with working buttons
+    nav_col1, nav_col2, nav_col3, nav_col4, nav_col5, nav_col6, nav_col7 = st.columns([2, 1, 1, 1, 1, 1, 1])
+    with nav_col1:
+        st.markdown(f'<div style="font-size:1.2rem; font-weight:900; color:{c["text"]}; padding:8px 0;">IncidentMind</div>', unsafe_allow_html=True)
+    with nav_col2:
+        if st.button("Features", key="nav_features"):
+            pass  # scrolls to features section below
+    with nav_col3:
+        if st.button("How it Works", key="nav_howitworks"):
+            pass
+    with nav_col4:
+        if st.button("Architecture", key="nav_arch"):
+            pass
+    with nav_col5:
+        if st.button("Docs", key="nav_docs"):
+            pass
+    with nav_col6:
+        if st.button("Sign In", key="nav_signin_btn"):
+            st.session_state.current_page = "signin"
+            st.rerun()
+    with nav_col7:
+        if st.button("Dashboard", key="nav_dash_btn", type="primary"):
+            st.session_state.current_page = "signin"
+            st.rerun()
+
+    # SECTION 1: Hero
     st.markdown(f"""<div style="text-align:center; padding:60px 20px 40px 20px; position:relative; overflow:hidden;">
 <div style="position:absolute; top:0; right:0; width:50%; height:100%; background:repeating-linear-gradient(-55deg, transparent, transparent 8px, rgba(16,185,129,0.06) 8px, rgba(16,185,129,0.06) 9px); pointer-events:none;"></div>
 <div style="display:inline-flex; align-items:center; gap:8px; background:{c['surface']}; border:1px solid {c['border']}; border-radius:100px; padding:8px 20px; font-size:0.85rem; color:{c['text_secondary']}; margin-bottom:40px;">Powered by AI <span style="background:rgba(16,185,129,0.12); color:{c['accent']}; padding:3px 12px; border-radius:4px; font-family:JetBrains Mono,monospace; font-size:0.75rem; font-weight:600; margin-left:8px;">Agentic Memory</span></div>
@@ -630,15 +649,11 @@ def render_login_page():
 <p style="font-size:1.1rem; color:{c['text_secondary']}; max-width:600px; margin:0 auto 40px auto; line-height:1.6;">End-to-end incident detection, diagnosis, and resolution for production systems, SRE teams, and AI agents.</p>
 </div>""", unsafe_allow_html=True)
 
-    # CTA Buttons using Streamlit native buttons
+    # CTA Buttons
     col1, col2, col3, col4, col5 = st.columns([2, 1.2, 0.5, 1.2, 2])
     with col2:
         if st.button("Get started", type="primary", use_container_width=True, key="cta_start"):
-            st.session_state.logged_in = True
-            st.session_state.user_name = "Demo User"
-            st.session_state.user_email = "demo@incidentmind.ai"
-            st.session_state.user_role = "Admin"
-            st.session_state.current_page = "home"
+            st.session_state.current_page = "signin"
             st.rerun()
     with col4:
         if st.button("See live demo", use_container_width=True, key="cta_demo"):
@@ -651,7 +666,7 @@ def render_login_page():
 
     st.markdown(f'<p style="text-align:center; font-size:0.85rem; color:{c["text_secondary"]}; margin-top:8px;">Open source - <a href="https://github.com/sathiyanarayanan17/incidentmind" style="color:{c["accent"]};">View on GitHub</a></p>', unsafe_allow_html=True)
 
-    # Section 2: Dashboard Preview
+    # SECTION 2: Dashboard Preview
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(f"""<div style="max-width:900px; margin:0 auto; background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; overflow:hidden; box-shadow:0 20px 60px {c['card_shadow']};">
 <div style="background:{c['surface2']}; padding:10px 16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid {c['border']};">
@@ -668,7 +683,7 @@ def render_login_page():
 </div>
 </div>""", unsafe_allow_html=True)
 
-    # Section 3: How it Works
+    # SECTION 3: Features / How it Works
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown(f"""<div style="text-align:center; padding:40px 20px;">
 <h2 style="font-size:2.2rem; font-weight:800; color:{c['text']}; letter-spacing:-1px; margin-bottom:12px;">How it works</h2>
@@ -676,32 +691,55 @@ def render_login_page():
 </div>
 <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; max-width:900px; margin:0 auto; padding:0 20px;">
 <div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; text-align:center;">
-<div style="font-size:1.5rem; margin-bottom:12px;">1</div>
+<div style="font-size:1.5rem; font-weight:800; color:{c['accent']}; margin-bottom:12px;">1</div>
 <div style="font-size:0.95rem; font-weight:700; color:{c['text']}; margin-bottom:6px;">Triage</div>
 <div style="font-size:0.8rem; color:{c['text_secondary']}; line-height:1.5;">Classifies severity, matches known patterns instantly</div>
 </div>
 <div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; text-align:center;">
-<div style="font-size:1.5rem; margin-bottom:12px;">2</div>
+<div style="font-size:1.5rem; font-weight:800; color:{c['accent']}; margin-bottom:12px;">2</div>
 <div style="font-size:0.95rem; font-weight:700; color:{c['text']}; margin-bottom:6px;">Diagnosis</div>
 <div style="font-size:0.8rem; color:{c['text_secondary']}; line-height:1.5;">Semantic search over past incidents via vector embeddings</div>
 </div>
 <div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; text-align:center;">
-<div style="font-size:1.5rem; margin-bottom:12px;">3</div>
+<div style="font-size:1.5rem; font-weight:800; color:{c['accent']}; margin-bottom:12px;">3</div>
 <div style="font-size:0.95rem; font-weight:700; color:{c['text']}; margin-bottom:6px;">Correlate</div>
 <div style="font-size:0.8rem; color:{c['text_secondary']}; line-height:1.5;">Finds recurring failure patterns, builds knowledge over time</div>
 </div>
 <div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; text-align:center;">
-<div style="font-size:1.5rem; margin-bottom:12px;">4</div>
+<div style="font-size:1.5rem; font-weight:800; color:{c['accent']}; margin-bottom:12px;">4</div>
 <div style="font-size:0.95rem; font-weight:700; color:{c['text']}; margin-bottom:6px;">Resolve</div>
 <div style="font-size:0.8rem; color:{c['text_secondary']}; line-height:1.5;">Suggests fixes ranked by past success rates</div>
 </div>
 </div>""", unsafe_allow_html=True)
 
-    # Section 4: Tech Stack
+    # SECTION 4: Architecture
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown(f"""<div style="text-align:center; padding:40px 20px;">
-<h2 style="font-size:2.2rem; font-weight:800; color:{c['text']}; letter-spacing:-1px; margin-bottom:12px;">Built with</h2>
+<h2 style="font-size:2.2rem; font-weight:800; color:{c['text']}; letter-spacing:-1px; margin-bottom:12px;">Architecture</h2>
 <p style="font-size:1rem; color:{c['text_secondary']}; max-width:500px; margin:0 auto 32px auto;">Production-grade infrastructure for agentic memory</p>
+</div>
+<div style="max-width:700px; margin:0 auto; background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:32px; font-family:JetBrains Mono,monospace; font-size:0.75rem; color:{c['text_secondary']}; line-height:2;">
+<div style="text-align:center; color:{c['text']}; font-weight:600; margin-bottom:16px;">Event Sources (CloudWatch, PagerDuty, Slack)</div>
+<div style="text-align:center; color:{c['accent']};">|</div>
+<div style="text-align:center; color:{c['accent']};">v</div>
+<div style="text-align:center; color:{c['text']}; font-weight:600;">AWS Lambda (Event Ingestion)</div>
+<div style="text-align:center; color:{c['accent']};">|</div>
+<div style="text-align:center; color:{c['accent']};">v</div>
+<div style="text-align:center; color:{c['text']}; font-weight:600;">Agent Orchestrator (ECS)</div>
+<div style="text-align:center; color:{c['text_secondary']};">[TriageAgent] [DiagnosisAgent] [CorrelatorAgent] [ResolutionAgent]</div>
+<div style="text-align:center; color:{c['accent']};">|</div>
+<div style="text-align:center; color:{c['accent']};">v</div>
+<div style="text-align:center; color:{c['accent']}; font-weight:700; font-size:0.85rem;">CockroachDB Cloud (Shared Agentic Memory)</div>
+<div style="text-align:center; color:{c['text_secondary']};">Agent State | Incident History | Vector Embeddings | Patterns</div>
+<div style="text-align:center; color:{c['accent']}; margin-top:8px;">^</div>
+<div style="text-align:center; color:{c['accent']};">| MCP Server</div>
+<div style="text-align:center; color:{c['text']}; font-weight:600;">Claude / Cursor (Human Operator)</div>
+</div>""", unsafe_allow_html=True)
+
+    # SECTION 5: Tech Stack
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown(f"""<div style="text-align:center; padding:20px 20px;">
+<h2 style="font-size:2.2rem; font-weight:800; color:{c['text']}; letter-spacing:-1px; margin-bottom:32px;">Built with</h2>
 </div>
 <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:700px; margin:0 auto; padding:0 20px;">
 <div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">CockroachDB Cloud</div>
@@ -715,46 +753,71 @@ def render_login_page():
 <div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">Amazon S3</div>
 </div>""", unsafe_allow_html=True)
 
-    # Section 5: Sign In (compact)
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown(f'<div style="text-align:center;"><h3 style="font-size:1.3rem; font-weight:700; color:{c["text"]};">Sign in to continue</h3></div>', unsafe_allow_html=True)
-
-    col1, col2, col3 = st.columns([1.5, 1, 1.5])
-    with col2:
-        # Google sign in button
-        st.markdown(f"""<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:8px; padding:12px; text-align:center; cursor:pointer; margin-bottom:8px;">
-<span style="font-size:0.85rem; font-weight:500; color:{c['text']};">Sign in with Google</span>
-</div>""", unsafe_allow_html=True)
-
-        if st.button("Continue with Google", key="google_signin", use_container_width=True):
-            st.session_state.logged_in = True
-            st.session_state.user_name = "Demo User"
-            st.session_state.user_email = "demo@gmail.com"
-            st.session_state.user_role = "Admin"
-            st.rerun()
-
-        st.markdown(f'<div style="text-align:center; font-size:0.75rem; color:{c["text_secondary"]}; margin:8px 0;">or sign in with email</div>', unsafe_allow_html=True)
-
-        email = st.text_input("Email", placeholder="you@company.com", key="login_email", label_visibility="collapsed")
-        password = st.text_input("Password", type="password", placeholder="Password", key="login_pass", label_visibility="collapsed")
-
-        if st.button("Sign In", type="primary", use_container_width=True, key="email_signin"):
-            if email:
-                st.session_state.logged_in = True
-                st.session_state.user_email = email
-                st.session_state.user_name = email.split("@")[0].replace(".", " ").title()
-                st.session_state.user_role = "Admin"
-                st.session_state.current_page = "home"
-                st.rerun()
-            else:
-                st.error("Please enter your email")
-
-        st.markdown(f'<div style="text-align:center; font-size:0.75rem; color:{c["text_secondary"]}; margin-top:8px;">Demo: any email works, no password needed</div>', unsafe_allow_html=True)
-
     # Footer
     st.markdown(f"""<div style="text-align:center; margin-top:48px; padding:24px; border-top:1px solid {c['border']}; font-size:0.8rem; color:{c['text_secondary']};">
 Built with CockroachDB + AWS Bedrock + LangChain | <span style="font-family:JetBrains Mono,monospace; font-size:0.7rem;">CockroachDB x AWS Hackathon 2024</span>
 </div>""", unsafe_allow_html=True)
+
+
+#  Sign In Page (separate page) 
+
+def render_signin_page():
+    c = get_colors()
+
+    # Top bar with back button
+    col1, col2, col3 = st.columns([1, 4, 1])
+    with col1:
+        if st.button("Back", key="signin_back"):
+            st.session_state.current_page = "home"
+            st.rerun()
+    with col2:
+        st.markdown(f'<div style="text-align:center; font-size:1.1rem; font-weight:800; color:{c["text"]}; padding:8px 0;">IncidentMind</div>', unsafe_allow_html=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # Sign in card
+    st.markdown(f"""<div style="text-align:center; margin-bottom:24px;">
+<h2 style="font-size:1.8rem; font-weight:800; color:{c['text']};">Sign in to IncidentMind</h2>
+<p style="font-size:0.9rem; color:{c['text_secondary']};">Choose your preferred sign-in method</p>
+</div>""", unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1.3, 1, 1.3])
+    with col2:
+        # Google
+        if st.button("Continue with Google", use_container_width=True, key="btn_google"):
+            st.session_state.logged_in = True
+            st.session_state.user_name = "Google User"
+            st.session_state.user_email = "user@gmail.com"
+            st.session_state.user_role = "Admin"
+            st.session_state.current_page = "home"
+            st.rerun()
+
+        # GitHub
+        if st.button("Continue with GitHub", use_container_width=True, key="btn_github"):
+            st.session_state.logged_in = True
+            st.session_state.user_name = "GitHub User"
+            st.session_state.user_email = "user@github.com"
+            st.session_state.user_role = "Admin"
+            st.session_state.current_page = "home"
+            st.rerun()
+
+        st.markdown(f'<div style="text-align:center; font-size:0.8rem; color:{c["text_secondary"]}; margin:16px 0; padding:8px 0; border-top:1px solid {c["border"]}; border-bottom:1px solid {c["border"]};">or sign in with email</div>', unsafe_allow_html=True)
+
+        # Email
+        email = st.text_input("Email", placeholder="you@company.com", key="si_email", label_visibility="collapsed")
+        password = st.text_input("Password", type="password", placeholder="Password", key="si_pass", label_visibility="collapsed")
+        phone = st.text_input("Mobile (optional)", placeholder="+91 9876543210", key="si_phone", label_visibility="collapsed")
+
+        if st.button("Sign In", type="primary", use_container_width=True, key="btn_email_signin"):
+            name = email.split("@")[0].replace(".", " ").title() if email else "User"
+            st.session_state.logged_in = True
+            st.session_state.user_email = email or "demo@incidentmind.ai"
+            st.session_state.user_name = name
+            st.session_state.user_role = "Admin"
+            st.session_state.current_page = "home"
+            st.rerun()
+
+        st.markdown(f'<div style="text-align:center; font-size:0.75rem; color:{c["text_secondary"]}; margin-top:16px;">Demo mode: any email works, no password needed</div>', unsafe_allow_html=True)
 
 
 #  Sidebar Navigation (matching professional grouped style) 
@@ -934,7 +997,11 @@ if not st.session_state.logged_in:
         .stApp > header {display: none;}
     </style>
     """, unsafe_allow_html=True)
-    render_login_page()
+
+    if st.session_state.current_page == "signin":
+        render_signin_page()
+    else:
+        render_landing_page()
     st.stop()
 
 render_sidebar()
