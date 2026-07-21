@@ -69,7 +69,7 @@ st.set_page_config(
 #  Session State Init 
 
 if "theme" not in st.session_state:
-    st.session_state.theme = "dark"
+    st.session_state.theme = "light"
 if "current_page" not in st.session_state:
     st.session_state.current_page = "home"
 if "incidents" not in st.session_state:
@@ -843,16 +843,11 @@ def render_sidebar():
         </div>
         """, unsafe_allow_html=True)
 
-        # Theme toggle
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("Dark", use_container_width=True, key="btn_dark"):
-                st.session_state.theme = "dark"
-                st.rerun()
-        with col2:
-            if st.button("Light", use_container_width=True, key="btn_light"):
-                st.session_state.theme = "light"
-                st.rerun()
+        # Theme toggle - single round button
+        theme_label = "Light" if st.session_state.theme == "dark" else "Dark"
+        if st.button(f"Switch to {theme_label}", key="theme_toggle", use_container_width=True):
+            st.session_state.theme = "light" if st.session_state.theme == "dark" else "dark"
+            st.rerun()
 
         # SECTION: INCIDENT OPS
         st.markdown(f"""
