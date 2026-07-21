@@ -615,139 +615,146 @@ inject_css()
 
 def render_login_page():
     c = get_colors()
-    # Top navigation bar like the screenshot
-    st.markdown(f"""
-    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 40px; background:{c['surface']}; border:1px solid {c['border']}; border-radius:100px; margin:16px auto; max-width:900px;">
-        <div style="display:flex; align-items:center; gap:8px;">
-            <div style="font-size:1.2rem; font-weight:900; color:{c['text']}; letter-spacing:-0.5px;">IncidentMind</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:32px; font-size:0.9rem; color:{c['text_secondary']};">
-            <span>Features</span>
-            <span>How it Works</span>
-            <span>Architecture</span>
-            <span>Docs</span>
-        </div>
-        <div style="display:flex; align-items:center; gap:12px;">
-            <div style="width:32px; height:32px; background:{c['accent']}; border-radius:50%; display:flex; align-items:center; justify-content:center;">
-                <span style="color:white; font-weight:700; font-size:12px;">D</span>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Top navigation bar
+    st.markdown(f"""<div style="display:flex; align-items:center; justify-content:space-between; padding:16px 40px; background:{c['surface']}; border:1px solid {c['border']}; border-radius:100px; margin:16px auto; max-width:900px;">
+<div style="font-size:1.2rem; font-weight:900; color:{c['text']}; letter-spacing:-0.5px;">IncidentMind</div>
+<div style="display:flex; align-items:center; gap:32px; font-size:0.9rem; color:{c['text_secondary']};"><span>Features</span><span>How it Works</span><span>Architecture</span><span>Docs</span></div>
+<div style="width:32px; height:32px; background:{c['accent']}; border-radius:50%; display:flex; align-items:center; justify-content:center;"><span style="color:white; font-weight:700; font-size:12px;">D</span></div>
+</div>""", unsafe_allow_html=True)
 
-    # Hero section with diagonal pattern like the screenshot
-    st.markdown(f"""
-    <div style="text-align:center; padding:80px 20px 60px 20px; position:relative; overflow:hidden;">
-        <div style="position:absolute; top:0; right:0; width:50%; height:100%; background:repeating-linear-gradient(-55deg, transparent, transparent 8px, rgba(16,185,129,0.06) 8px, rgba(16,185,129,0.06) 9px); pointer-events:none;"></div>
+    # Hero section
+    st.markdown(f"""<div style="text-align:center; padding:60px 20px 40px 20px; position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; right:0; width:50%; height:100%; background:repeating-linear-gradient(-55deg, transparent, transparent 8px, rgba(16,185,129,0.06) 8px, rgba(16,185,129,0.06) 9px); pointer-events:none;"></div>
+<div style="display:inline-flex; align-items:center; gap:8px; background:{c['surface']}; border:1px solid {c['border']}; border-radius:100px; padding:8px 20px; font-size:0.85rem; color:{c['text_secondary']}; margin-bottom:40px;">Powered by AI <span style="background:rgba(16,185,129,0.12); color:{c['accent']}; padding:3px 12px; border-radius:4px; font-family:JetBrains Mono,monospace; font-size:0.75rem; font-weight:600; margin-left:8px;">Agentic Memory</span></div>
+<h1 style="font-size:3.8rem; font-weight:900; color:{c['text']}; line-height:1.05; margin:0 auto 24px auto; max-width:800px; letter-spacing:-2px;">The incident response infrastructure agents build on</h1>
+<p style="font-size:1.1rem; color:{c['text_secondary']}; max-width:600px; margin:0 auto 40px auto; line-height:1.6;">End-to-end incident detection, diagnosis, and resolution for production systems, SRE teams, and AI agents.</p>
+</div>""", unsafe_allow_html=True)
 
-        <div style="display:inline-flex; align-items:center; gap:8px; background:{c['surface']}; border:1px solid {c['border']}; border-radius:100px; padding:8px 20px; font-size:0.85rem; color:{c['text_secondary']}; margin-bottom:40px;">
-            Powered by AI &nbsp;<span style="background:rgba(16,185,129,0.12); color:{c['accent']}; padding:3px 12px; border-radius:4px; font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:600;">Agentic Memory</span>&nbsp; &#8594;
-        </div>
-
-        <h1 style="font-size:4.2rem; font-weight:900; color:{c['text']}; line-height:1.05; margin:0 auto 24px auto; max-width:800px; letter-spacing:-2.5px; font-family:'Inter',serif;">The incident response<br>infrastructure agents build on</h1>
-
-        <p style="font-size:1.1rem; color:{c['text_secondary']}; max-width:600px; margin:0 auto 40px auto; line-height:1.6;">
-            End-to-end incident detection, diagnosis, and resolution for <strong style="color:{c['text']};">production systems</strong>, <strong style="color:{c['text']};">SRE teams</strong>, and <strong style="color:{c['text']};">AI agents</strong>.
-        </p>
-
-        <div style="display:flex; justify-content:center; gap:16px; margin-bottom:20px;">
-            <span id="cta-start" style="background:{c['text']}; color:{c['bg']}; padding:16px 36px; border-radius:100px; font-size:1rem; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">Get started &#8594;</span>
-            <span style="background:{c['surface']}; color:{c['text']}; padding:16px 36px; border-radius:100px; font-size:1rem; font-weight:500; border:1px solid {c['border']}; cursor:pointer;">See live demo</span>
-        </div>
-
-        <p style="font-size:0.85rem; color:{c['text_secondary']}; margin-top:16px;">
-            Open source - <span style="color:{c['accent']}; cursor:pointer;">View on GitHub</span>
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # System dashboard preview (like the browser mockup at bottom of screenshot)
-    st.markdown(f"""
-    <div style="max-width:900px; margin:0 auto; background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; overflow:hidden; box-shadow:0 20px 60px {c['card_shadow']};">
-        <div style="background:{c['surface2']}; padding:10px 16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid {c['border']};">
-            <div style="width:10px; height:10px; border-radius:50%; background:#ef4444;"></div>
-            <div style="width:10px; height:10px; border-radius:50%; background:#f59e0b;"></div>
-            <div style="width:10px; height:10px; border-radius:50%; background:#10b981;"></div>
-            <div style="flex:1; text-align:center;">
-                <span style="background:{c['bg']}; padding:4px 24px; border-radius:6px; font-size:0.75rem; color:{c['text_secondary']}; font-family:'JetBrains Mono',monospace;">incidentmind/dashboard</span>
-            </div>
-        </div>
-        <div style="padding:24px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
-            <div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;">
-                <div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:'JetBrains Mono',monospace;">4</div>
-                <div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:0.5px;">Active Agents</div>
-            </div>
-            <div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;">
-                <div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:'JetBrains Mono',monospace;">12</div>
-                <div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:0.5px;">Incidents Today</div>
-            </div>
-            <div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;">
-                <div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:'JetBrains Mono',monospace;">8m</div>
-                <div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:0.5px;">Avg MTTR</div>
-            </div>
-            <div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;">
-                <div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:'JetBrains Mono',monospace;">99.9%</div>
-                <div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:0.5px;">Uptime</div>
-            </div>
-        </div>
-        <div style="padding:0 24px 24px 24px;">
-            <div style="background:{c['bg']}; border-radius:8px; padding:16px;">
-                <div style="font-size:0.8rem; font-weight:600; color:{c['text']}; margin-bottom:12px;">Recent Agent Activity</div>
-                <div style="display:flex; flex-direction:column; gap:8px;">
-                    <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
-                        <span style="width:6px; height:6px; border-radius:50%; background:{c['accent']};"></span>
-                        <span style="color:{c['accent']}; font-family:'JetBrains Mono',monospace; font-weight:600; min-width:120px;">TriageAgent</span>
-                        <span style="color:{c['text_secondary']};">Classified INC-A3F2 as critical - database connection pool</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
-                        <span style="width:6px; height:6px; border-radius:50%; background:#3b82f6;"></span>
-                        <span style="color:#3b82f6; font-family:'JetBrains Mono',monospace; font-weight:600; min-width:120px;">DiagnosisAgent</span>
-                        <span style="color:{c['text_secondary']};">Found 3 similar past incidents via vector search</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
-                        <span style="width:6px; height:6px; border-radius:50%; background:#f59e0b;"></span>
-                        <span style="color:#f59e0b; font-family:'JetBrains Mono',monospace; font-weight:600; min-width:120px;">ResolutionAgent</span>
-                        <span style="color:{c['text_secondary']};">Proposed playbook: DB Connection Pool Recovery (94% success)</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Login form below
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown(f"""
-    <div style="text-align:center; margin-bottom:16px;">
-        <h3 style="font-size:1.3rem; font-weight:700; color:{c['text']};">Sign in to Dashboard</h3>
-        <p style="font-size:0.85rem; color:{c['text_secondary']};">Enter any email to access the demo</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    col1, col2, col3 = st.columns([1.2, 1, 1.2])
+    # CTA Buttons using Streamlit native buttons
+    col1, col2, col3, col4, col5 = st.columns([2, 1.2, 0.5, 1.2, 2])
     with col2:
+        if st.button("Get started", type="primary", use_container_width=True, key="cta_start"):
+            st.session_state.logged_in = True
+            st.session_state.user_name = "Demo User"
+            st.session_state.user_email = "demo@incidentmind.ai"
+            st.session_state.user_role = "Admin"
+            st.session_state.current_page = "home"
+            st.rerun()
+    with col4:
+        if st.button("See live demo", use_container_width=True, key="cta_demo"):
+            st.session_state.logged_in = True
+            st.session_state.user_name = "Demo User"
+            st.session_state.user_email = "demo@incidentmind.ai"
+            st.session_state.user_role = "Viewer"
+            st.session_state.current_page = "home"
+            st.rerun()
+
+    st.markdown(f'<p style="text-align:center; font-size:0.85rem; color:{c["text_secondary"]}; margin-top:8px;">Open source - <a href="https://github.com/sathiyanarayanan17/incidentmind" style="color:{c["accent"]};">View on GitHub</a></p>', unsafe_allow_html=True)
+
+    # Section 2: Dashboard Preview
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(f"""<div style="max-width:900px; margin:0 auto; background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; overflow:hidden; box-shadow:0 20px 60px {c['card_shadow']};">
+<div style="background:{c['surface2']}; padding:10px 16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid {c['border']};">
+<div style="width:10px; height:10px; border-radius:50%; background:#ef4444;"></div>
+<div style="width:10px; height:10px; border-radius:50%; background:#f59e0b;"></div>
+<div style="width:10px; height:10px; border-radius:50%; background:#10b981;"></div>
+<div style="flex:1; text-align:center;"><span style="background:{c['bg']}; padding:4px 24px; border-radius:6px; font-size:0.75rem; color:{c['text_secondary']}; font-family:JetBrains Mono,monospace;">incidentmind/dashboard</span></div>
+</div>
+<div style="padding:24px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+<div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;"><div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:JetBrains Mono,monospace;">4</div><div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase;">Active Agents</div></div>
+<div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;"><div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:JetBrains Mono,monospace;">12</div><div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase;">Incidents Today</div></div>
+<div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;"><div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:JetBrains Mono,monospace;">8m</div><div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase;">Avg MTTR</div></div>
+<div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;"><div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:JetBrains Mono,monospace;">99.9%</div><div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase;">Uptime</div></div>
+</div>
+</div>""", unsafe_allow_html=True)
+
+    # Section 3: How it Works
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown(f"""<div style="text-align:center; padding:40px 20px;">
+<h2 style="font-size:2.2rem; font-weight:800; color:{c['text']}; letter-spacing:-1px; margin-bottom:12px;">How it works</h2>
+<p style="font-size:1rem; color:{c['text_secondary']}; max-width:500px; margin:0 auto 32px auto;">Four specialized agents collaborate through shared persistent memory in CockroachDB</p>
+</div>
+<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; max-width:900px; margin:0 auto; padding:0 20px;">
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; text-align:center;">
+<div style="font-size:1.5rem; margin-bottom:12px;">1</div>
+<div style="font-size:0.95rem; font-weight:700; color:{c['text']}; margin-bottom:6px;">Triage</div>
+<div style="font-size:0.8rem; color:{c['text_secondary']}; line-height:1.5;">Classifies severity, matches known patterns instantly</div>
+</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; text-align:center;">
+<div style="font-size:1.5rem; margin-bottom:12px;">2</div>
+<div style="font-size:0.95rem; font-weight:700; color:{c['text']}; margin-bottom:6px;">Diagnosis</div>
+<div style="font-size:0.8rem; color:{c['text_secondary']}; line-height:1.5;">Semantic search over past incidents via vector embeddings</div>
+</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; text-align:center;">
+<div style="font-size:1.5rem; margin-bottom:12px;">3</div>
+<div style="font-size:0.95rem; font-weight:700; color:{c['text']}; margin-bottom:6px;">Correlate</div>
+<div style="font-size:0.8rem; color:{c['text_secondary']}; line-height:1.5;">Finds recurring failure patterns, builds knowledge over time</div>
+</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; text-align:center;">
+<div style="font-size:1.5rem; margin-bottom:12px;">4</div>
+<div style="font-size:0.95rem; font-weight:700; color:{c['text']}; margin-bottom:6px;">Resolve</div>
+<div style="font-size:0.8rem; color:{c['text_secondary']}; line-height:1.5;">Suggests fixes ranked by past success rates</div>
+</div>
+</div>""", unsafe_allow_html=True)
+
+    # Section 4: Tech Stack
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown(f"""<div style="text-align:center; padding:40px 20px;">
+<h2 style="font-size:2.2rem; font-weight:800; color:{c['text']}; letter-spacing:-1px; margin-bottom:12px;">Built with</h2>
+<p style="font-size:1rem; color:{c['text_secondary']}; max-width:500px; margin:0 auto 32px auto;">Production-grade infrastructure for agentic memory</p>
+</div>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:700px; margin:0 auto; padding:0 20px;">
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">CockroachDB Cloud</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">MCP Server</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">Vector Indexing</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">Amazon Bedrock</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">AWS Lambda</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">Amazon ECS</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">LangChain</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">Python</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:14px 18px; font-size:0.85rem; font-weight:500; color:{c['text']};">Amazon S3</div>
+</div>""", unsafe_allow_html=True)
+
+    # Section 5: Sign In (compact)
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown(f'<div style="text-align:center;"><h3 style="font-size:1.3rem; font-weight:700; color:{c["text"]};">Sign in to continue</h3></div>', unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1.5, 1, 1.5])
+    with col2:
+        # Google sign in button
+        st.markdown(f"""<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:8px; padding:12px; text-align:center; cursor:pointer; margin-bottom:8px;">
+<span style="font-size:0.85rem; font-weight:500; color:{c['text']};">Sign in with Google</span>
+</div>""", unsafe_allow_html=True)
+
+        if st.button("Continue with Google", key="google_signin", use_container_width=True):
+            st.session_state.logged_in = True
+            st.session_state.user_name = "Demo User"
+            st.session_state.user_email = "demo@gmail.com"
+            st.session_state.user_role = "Admin"
+            st.rerun()
+
+        st.markdown(f'<div style="text-align:center; font-size:0.75rem; color:{c["text_secondary"]}; margin:8px 0;">or sign in with email</div>', unsafe_allow_html=True)
+
         email = st.text_input("Email", placeholder="you@company.com", key="login_email", label_visibility="collapsed")
         password = st.text_input("Password", type="password", placeholder="Password", key="login_pass", label_visibility="collapsed")
-        role = st.selectbox("Role", ["Admin", "SRE Lead", "Engineer", "Viewer"], key="login_role", label_visibility="collapsed")
 
-        if st.button("Sign In", type="primary", use_container_width=True):
+        if st.button("Sign In", type="primary", use_container_width=True, key="email_signin"):
             if email:
                 st.session_state.logged_in = True
                 st.session_state.user_email = email
                 st.session_state.user_name = email.split("@")[0].replace(".", " ").title()
-                st.session_state.user_role = role
+                st.session_state.user_role = "Admin"
                 st.session_state.current_page = "home"
                 st.rerun()
             else:
                 st.error("Please enter your email")
 
+        st.markdown(f'<div style="text-align:center; font-size:0.75rem; color:{c["text_secondary"]}; margin-top:8px;">Demo: any email works, no password needed</div>', unsafe_allow_html=True)
+
     # Footer
-    st.markdown(f"""
-    <div style="text-align:center; margin-top:48px; padding:24px; font-size:0.8rem; color:{c['text_secondary']};">
-        Built with CockroachDB + AWS Bedrock + LangChain<br>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem;">CockroachDB x AWS Hackathon 2024</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(f"""<div style="text-align:center; margin-top:48px; padding:24px; border-top:1px solid {c['border']}; font-size:0.8rem; color:{c['text_secondary']};">
+Built with CockroachDB + AWS Bedrock + LangChain | <span style="font-family:JetBrains Mono,monospace; font-size:0.7rem;">CockroachDB x AWS Hackathon 2024</span>
+</div>""", unsafe_allow_html=True)
 
 
 #  Sidebar Navigation (matching professional grouped style) 
