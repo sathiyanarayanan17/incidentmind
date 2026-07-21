@@ -105,24 +105,24 @@ if "user_role" not in st.session_state:
 def get_colors():
     if st.session_state.theme == "dark":
         return {
-            "bg": "#0f172a",
-            "surface": "#1e293b",
-            "surface2": "#334155",
-            "text": "#f1f5f9",
-            "text_secondary": "#94a3b8",
+            "bg": "#111111",
+            "surface": "#1a1a1a",
+            "surface2": "#2a2a2a",
+            "text": "#f5f5f5",
+            "text_secondary": "#999999",
             "accent": "#10b981",
             "accent_hover": "#059669",
             "danger": "#ef4444",
             "warning": "#f59e0b",
             "info": "#3b82f6",
-            "border": "#334155",
-            "card_shadow": "rgba(0,0,0,0.4)",
+            "border": "#2a2a2a",
+            "card_shadow": "rgba(0,0,0,0.3)",
         }
     else:
         return {
-            "bg": "#ffffff",
-            "surface": "#f9fafb",
-            "surface2": "#f3f4f6",
+            "bg": "#f5f7f5",
+            "surface": "#ffffff",
+            "surface2": "#f0f2f0",
             "text": "#111827",
             "text_secondary": "#6b7280",
             "accent": "#10b981",
@@ -131,7 +131,7 @@ def get_colors():
             "warning": "#f59e0b",
             "info": "#3b82f6",
             "border": "#e5e7eb",
-            "card_shadow": "rgba(0,0,0,0.08)",
+            "card_shadow": "rgba(0,0,0,0.06)",
         }
 
 
@@ -615,27 +615,121 @@ inject_css()
 
 def render_login_page():
     c = get_colors()
+    # Top navigation bar like the screenshot
     st.markdown(f"""
-    <div style="display:flex; justify-content:center; align-items:center; min-height:80vh;">
-        <div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:16px; padding:48px; max-width:420px; width:100%; box-shadow:0 8px 30px {c['card_shadow']};">
-            <div style="text-align:center; margin-bottom:32px;">
-                <div style="width:56px; height:56px; background:linear-gradient(135deg, {c['accent']}, #06b6d4); border-radius:12px; display:inline-flex; align-items:center; justify-content:center; margin-bottom:16px;">
-                    <span style="font-size:24px; color:white; font-weight:900;">IM</span>
-                </div>
-                <h2 style="font-size:1.5rem; font-weight:700; color:{c['text']}; margin:0;">Welcome to IncidentMind</h2>
-                <p style="font-size:0.9rem; color:{c['text_secondary']}; margin-top:8px;">Sign in to access the incident response platform</p>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 40px; background:{c['surface']}; border:1px solid {c['border']}; border-radius:100px; margin:16px auto; max-width:900px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <div style="font-size:1.2rem; font-weight:900; color:{c['text']}; letter-spacing:-0.5px;">IncidentMind</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:32px; font-size:0.9rem; color:{c['text_secondary']};">
+            <span>Features</span>
+            <span>How it Works</span>
+            <span>Architecture</span>
+            <span>Docs</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:32px; height:32px; background:{c['accent']}; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                <span style="color:white; font-weight:700; font-size:12px;">D</span>
             </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 1.5, 1])
-    with col2:
-        email = st.text_input("Email", placeholder="you@company.com", key="login_email")
-        password = st.text_input("Password", type="password", placeholder="Enter password", key="login_pass")
-        role = st.selectbox("Role", ["Admin", "SRE Lead", "Engineer", "Viewer"], key="login_role")
+    # Hero section with diagonal pattern like the screenshot
+    st.markdown(f"""
+    <div style="text-align:center; padding:80px 20px 60px 20px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; right:0; width:50%; height:100%; background:repeating-linear-gradient(-55deg, transparent, transparent 8px, rgba(16,185,129,0.06) 8px, rgba(16,185,129,0.06) 9px); pointer-events:none;"></div>
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        <div style="display:inline-flex; align-items:center; gap:8px; background:{c['surface']}; border:1px solid {c['border']}; border-radius:100px; padding:8px 20px; font-size:0.85rem; color:{c['text_secondary']}; margin-bottom:40px;">
+            Powered by AI &nbsp;<span style="background:rgba(16,185,129,0.12); color:{c['accent']}; padding:3px 12px; border-radius:4px; font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:600;">Agentic Memory</span>&nbsp; &#8594;
+        </div>
+
+        <h1 style="font-size:4.2rem; font-weight:900; color:{c['text']}; line-height:1.05; margin:0 auto 24px auto; max-width:800px; letter-spacing:-2.5px; font-family:'Inter',serif;">The incident response<br>infrastructure agents build on</h1>
+
+        <p style="font-size:1.1rem; color:{c['text_secondary']}; max-width:600px; margin:0 auto 40px auto; line-height:1.6;">
+            End-to-end incident detection, diagnosis, and resolution for <strong style="color:{c['text']};">production systems</strong>, <strong style="color:{c['text']};">SRE teams</strong>, and <strong style="color:{c['text']};">AI agents</strong>.
+        </p>
+
+        <div style="display:flex; justify-content:center; gap:16px; margin-bottom:20px;">
+            <span id="cta-start" style="background:#111; color:white; padding:16px 36px; border-radius:100px; font-size:1rem; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">Get started &#8594;</span>
+            <span style="background:{c['surface']}; color:{c['text']}; padding:16px 36px; border-radius:100px; font-size:1rem; font-weight:500; border:1px solid {c['border']}; cursor:pointer;">See live demo</span>
+        </div>
+
+        <p style="font-size:0.85rem; color:{c['text_secondary']}; margin-top:16px;">
+            Open source - <span style="color:{c['accent']}; cursor:pointer;">View on GitHub</span>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # System dashboard preview (like the browser mockup at bottom of screenshot)
+    st.markdown(f"""
+    <div style="max-width:900px; margin:0 auto; background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; overflow:hidden; box-shadow:0 20px 60px {c['card_shadow']};">
+        <div style="background:{c['surface2']}; padding:10px 16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid {c['border']};">
+            <div style="width:10px; height:10px; border-radius:50%; background:#ef4444;"></div>
+            <div style="width:10px; height:10px; border-radius:50%; background:#f59e0b;"></div>
+            <div style="width:10px; height:10px; border-radius:50%; background:#10b981;"></div>
+            <div style="flex:1; text-align:center;">
+                <span style="background:{c['bg']}; padding:4px 24px; border-radius:6px; font-size:0.75rem; color:{c['text_secondary']}; font-family:'JetBrains Mono',monospace;">incidentmind/dashboard</span>
+            </div>
+        </div>
+        <div style="padding:24px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+            <div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;">
+                <div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:'JetBrains Mono',monospace;">4</div>
+                <div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:0.5px;">Active Agents</div>
+            </div>
+            <div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;">
+                <div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:'JetBrains Mono',monospace;">12</div>
+                <div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:0.5px;">Incidents Today</div>
+            </div>
+            <div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;">
+                <div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:'JetBrains Mono',monospace;">8m</div>
+                <div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:0.5px;">Avg MTTR</div>
+            </div>
+            <div style="background:{c['bg']}; border-radius:8px; padding:16px; text-align:center;">
+                <div style="font-size:1.8rem; font-weight:800; color:{c['accent']}; font-family:'JetBrains Mono',monospace;">99.9%</div>
+                <div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:0.5px;">Uptime</div>
+            </div>
+        </div>
+        <div style="padding:0 24px 24px 24px;">
+            <div style="background:{c['bg']}; border-radius:8px; padding:16px;">
+                <div style="font-size:0.8rem; font-weight:600; color:{c['text']}; margin-bottom:12px;">Recent Agent Activity</div>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
+                        <span style="width:6px; height:6px; border-radius:50%; background:{c['accent']};"></span>
+                        <span style="color:{c['accent']}; font-family:'JetBrains Mono',monospace; font-weight:600; min-width:120px;">TriageAgent</span>
+                        <span style="color:{c['text_secondary']};">Classified INC-A3F2 as critical - database connection pool</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
+                        <span style="width:6px; height:6px; border-radius:50%; background:#3b82f6;"></span>
+                        <span style="color:#3b82f6; font-family:'JetBrains Mono',monospace; font-weight:600; min-width:120px;">DiagnosisAgent</span>
+                        <span style="color:{c['text_secondary']};">Found 3 similar past incidents via vector search</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
+                        <span style="width:6px; height:6px; border-radius:50%; background:#f59e0b;"></span>
+                        <span style="color:#f59e0b; font-family:'JetBrains Mono',monospace; font-weight:600; min-width:120px;">ResolutionAgent</span>
+                        <span style="color:{c['text_secondary']};">Proposed playbook: DB Connection Pool Recovery (94% success)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Login form below
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="text-align:center; margin-bottom:16px;">
+        <h3 style="font-size:1.3rem; font-weight:700; color:{c['text']};">Sign in to Dashboard</h3>
+        <p style="font-size:0.85rem; color:{c['text_secondary']};">Enter any email to access the demo</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1.2, 1, 1.2])
+    with col2:
+        email = st.text_input("Email", placeholder="you@company.com", key="login_email", label_visibility="collapsed")
+        password = st.text_input("Password", type="password", placeholder="Password", key="login_pass", label_visibility="collapsed")
+        role = st.selectbox("Role", ["Admin", "SRE Lead", "Engineer", "Viewer"], key="login_role", label_visibility="collapsed")
+
         if st.button("Sign In", type="primary", use_container_width=True):
             if email:
                 st.session_state.logged_in = True
@@ -647,12 +741,13 @@ def render_login_page():
             else:
                 st.error("Please enter your email")
 
-        st.markdown(f"""
-        <div style="text-align:center; margin-top:24px; font-size:0.8rem; color:{c['text_secondary']};">
-            Demo credentials: any email works<br>
-            <span style="font-family:'JetBrains Mono',monospace; font-size:0.75rem;">v0.1.0 - CockroachDB x AWS Hackathon</span>
-        </div>
-        """, unsafe_allow_html=True)
+    # Footer
+    st.markdown(f"""
+    <div style="text-align:center; margin-top:48px; padding:24px; font-size:0.8rem; color:{c['text_secondary']};">
+        Built with CockroachDB + AWS Bedrock + LangChain<br>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem;">CockroachDB x AWS Hackathon 2024</span>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 #  Sidebar Navigation (matching professional grouped style) 
