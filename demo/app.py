@@ -88,6 +88,8 @@ if "demo_ticker" not in st.session_state:
     st.session_state.demo_ticker = 0
 if "runbook_approvals" not in st.session_state:
     st.session_state.runbook_approvals = {}
+if "replay_active" not in st.session_state:
+    st.session_state.replay_active = False
 if "region" not in st.session_state:
     st.session_state.region = random.choice(["us-east-1", "eu-west-1", "ap-south-1"])
 if "logged_in" not in st.session_state:
