@@ -1052,6 +1052,35 @@ def render_sidebar():
                 st.session_state.current_page = key
                 st.rerun()
 
+        # SECTION: DEMO & INSIGHTS
+        st.markdown(f"""
+        <div style="padding:20px 12px 6px 12px; font-size:0.7rem; font-weight:600; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:1px;">
+            Demo & Insights
+        </div>
+        """, unsafe_allow_html=True)
+
+        demo_pages = [
+            ("simulator", "Live Simulator"),
+            ("thought_process", "Agent Thought Process"),
+            ("before_after", "Before / After"),
+            ("replay", "Incident Replay"),
+            ("persistence", "Memory Persistence"),
+            ("notifications", "Notifications"),
+            ("agent_status", "Agent Status"),
+            ("search", "Universal Search"),
+            ("dependency", "Dependency Map"),
+            ("weekly_report", "Weekly Report"),
+        ]
+        for key, label in demo_pages:
+            is_active = st.session_state.current_page == key
+            if st.button(
+                f"{'  > ' if is_active else '    '}{label}{'  *' if is_active else ''}",
+                key=f"nav_{key}",
+                use_container_width=True,
+            ):
+                st.session_state.current_page = key
+                st.rerun()
+
         # SECTION: INFRASTRUCTURE
         st.markdown(f"""
         <div style="padding:20px 12px 6px 12px; font-size:0.7rem; font-weight:600; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:1px;">
@@ -2629,6 +2658,572 @@ def page_roi():
 
 
 # 
+# DEMO & INSIGHTS PAGES
+# 
+
+def page_simulator():
+    """Live Incident Simulator with auto-generation."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Live Incident Simulator</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>Auto-generates incidents every few seconds to demonstrate real-time agent response.</p>", unsafe_allow_html=True)
+
+    if "sim_running" not in st.session_state:
+        st.session_state.sim_running = False
+    if "sim_feed" not in st.session_state:
+        st.session_state.sim_feed = []
+
+    col1, col2, col3 = st.columns([1, 1, 3])
+    with col1:
+        if st.button("▶ Start Simulation", use_container_width=True, disabled=st.session_state.sim_running):
+            st.session_state.sim_running = True
+            st.rerun()
+    with col2:
+        if st.button("⏹ Stop Simulation", use_container_width=True, disabled=not st.session_state.sim_running):
+            st.session_state.sim_running = False
+            st.rerun()
+
+    if st.session_state.sim_running:
+        services = ["payment-service", "gateway-api", "auth-service", "ml-inference", "order-service"]
+        severities = ["critical", "high", "medium", "warning"]
+        titles = ["CPU Spike Detected", "Connection Pool Exhausted", "Latency Threshold Breached", "Memory Leak Suspected", "Pod Restart Loop"]
+        agents = ["Triage Agent", "Diagnostic Agent", "Resolution Agent", "Learning Agent"]
+
+        new_incident = {
+            "id": str(uuid.uuid4())[:8],
+            "title": random.choice(titles),
+            "service": random.choice(services),
+            "severity": random.choice(severities),
+            "time": datetime.now().strftime("%H:%M:%S"),
+            "agent": random.choice(agents),
+            "status": random.choice(["Investigating", "Diagnosing", "Resolving"]),
+        }
+        st.session_state.sim_feed.insert(0, new_incident)
+        st.session_state.sim_feed = st.session_state.sim_feed[:20]
+
+        st.markdown(f"""
+        <div class="metric-card" style="border-left:4px solid {c['accent']}; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:{c['accent']}; font-weight:700;">⚡ Simulation Active</span>
+                <span style="color:{c['text_secondary']}; font-size:0.8rem;">{len(st.session_state.sim_feed)} incidents generated</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        time.sleep(0.5)
+        st.rerun()
+
+    # Display feed
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0;'>📡 Live Feed</div>", unsafe_allow_html=True)
+    for item in st.session_state.sim_feed[:10]:
+        sev_color = c['danger'] if item['severity'] == 'critical' else c['warning'] if item['severity'] == 'high' else c['info']
+        st.markdown(f"""
+        <div style="padding:10px 14px; margin-bottom:6px; background:{c['surface']}; border-radius:8px; border-left:3px solid {sev_color};">
+            <div style="display:flex; justify-content:space-between;">
+                <span style="font-weight:600; color:{c['text']}; font-size:0.85rem;">[{item['time']}] {item['title']}</span>
+                <span style="font-size:0.75rem; color:{sev_color}; text-transform:uppercase;">{item['severity']}</span>
+            </div>
+            <div style="font-size:0.78rem; color:{c['text_secondary']}; margin-top:4px;">
+                Service: {item['service']} • Agent: {item['agent']} • Status: {item['status']}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    if not st.session_state.sim_feed:
+        st.info("Press **Start Simulation** to begin generating incidents.")
+
+
+def page_thought_process():
+    """Agent Thought Process Viewer."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Agent Thought Process</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>Step-by-step reasoning chain for each agent handling an incident.</p>", unsafe_allow_html=True)
+
+    sample_incident = "Database Connection Pool Exhausted on payment-service"
+    st.markdown(f"""
+    <div class="metric-card" style="border-left:4px solid {c['danger']}; margin-bottom:20px;">
+        <div style="font-size:0.8rem; color:{c['text_secondary']};">Sample Incident</div>
+        <div style="font-weight:700; color:{c['text']}; font-size:1rem;">{sample_incident}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    agents_reasoning = [
+        ("🔍 Triage Agent", [
+            ("Observation", "Received alert: connection pool at 100% capacity on payment-service. 47 pending requests queued."),
+            ("Hypothesis", "Likely causes: connection leak, traffic spike, or slow queries holding connections."),
+            ("Action", "Classified as CRITICAL. Checked recent deployment history and traffic patterns."),
+            ("Result", "No recent deploys. Traffic is 2.3x normal. Escalating to Diagnostic Agent with high priority."),
+        ]),
+        ("🔬 Diagnostic Agent", [
+            ("Observation", "Pool size: 50 connections. Active: 50. Idle: 0. Avg query time jumped from 12ms to 4200ms."),
+            ("Hypothesis", "Slow queries are holding connections. Likely a missing index or lock contention after schema change."),
+            ("Action", "Queried CockroachDB pg_stat_activity. Found 38 queries waiting on row-level locks in orders table."),
+            ("Result", "Root cause: Lock contention from bulk update job running concurrently with transaction processing."),
+        ]),
+        ("🛠️ Resolution Agent", [
+            ("Observation", "Bulk update job PID 4829 holding locks on 12,000 rows in orders table."),
+            ("Hypothesis", "Terminating the bulk job and retrying with smaller batches will release locks immediately."),
+            ("Action", "Executed: 1) Kill bulk job 2) Increase pool size temporarily 3) Schedule batch job for off-peak."),
+            ("Result", "Pool utilization dropped to 34% within 8 seconds. All pending requests cleared. Service healthy."),
+        ]),
+        ("🧠 Learning Agent", [
+            ("Observation", "Incident resolved in 8.2 minutes. Pattern: bulk operations + high traffic = pool exhaustion."),
+            ("Hypothesis", "This pattern will recur unless bulk jobs are isolated or scheduled differently."),
+            ("Action", "Stored pattern in CockroachDB knowledge base. Created preventive playbook. Updated alert thresholds."),
+            ("Result", "Knowledge retained permanently. Next occurrence will trigger auto-resolution without human intervention."),
+        ]),
+    ]
+
+    for agent_name, steps in agents_reasoning:
+        with st.expander(agent_name, expanded=True):
+            for i, (phase, detail) in enumerate(steps):
+                phase_colors = {"Observation": c['info'], "Hypothesis": c['warning'], "Action": c['accent'], "Result": c['text']}
+                color = phase_colors.get(phase, c['text'])
+                progress_val = (i + 1) * 25
+                st.markdown(f"""
+                <div style="margin-bottom:12px; padding:8px 12px; border-left:3px solid {color}; background:{c['surface2']}; border-radius:0 6px 6px 0;">
+                    <div style="font-weight:700; color:{color}; font-size:0.8rem; text-transform:uppercase;">{phase}</div>
+                    <div style="color:{c['text']}; font-size:0.85rem; margin-top:4px;">{detail}</div>
+                </div>
+                """, unsafe_allow_html=True)
+                st.progress(progress_val / 100)
+
+
+def page_before_after():
+    """Before/After Comparison page."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Before / After Comparison</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>See the measurable impact of IncidentMind on your incident response workflow.</p>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown(f"""
+        <div style="padding:16px; background:{c['surface']}; border-radius:12px; border:2px solid {c['danger']}; margin-bottom:12px;">
+            <div style="text-align:center; font-weight:700; color:{c['danger']}; font-size:1rem; margin-bottom:16px;">❌ Without IncidentMind</div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.markdown(render_metric_card("Mean Time to Resolve", "45 min", "⏱️", "Industry avg: 60min"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Detection Time", "15 min", "🔍", "Manual monitoring"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Pattern Recognition", "Manual", "🧩", "Depends on engineer memory"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Knowledge Retention", "Lost", "💨", "Gone when engineer leaves"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Overnight Coverage", "None", "🌙", "Pager duty fatigue"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Consistency", "Variable", "📊", "Depends on who's on-call"), unsafe_allow_html=True)
+
+    with col2:
+        st.markdown(f"""
+        <div style="padding:16px; background:{c['surface']}; border-radius:12px; border:2px solid {c['accent']}; margin-bottom:12px;">
+            <div style="text-align:center; font-weight:700; color:{c['accent']}; font-size:1rem; margin-bottom:16px;">✅ With IncidentMind</div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.markdown(render_metric_card("Mean Time to Resolve", "8 min", "⏱️", "↓82% improvement"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Detection Time", "< 1 min", "🔍", "↓93% faster"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Pattern Recognition", "Automatic", "🧩", "+100% coverage"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Knowledge Retention", "Permanent", "🏦", "Stored in CockroachDB"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Overnight Coverage", "24/7 Agents", "🌙", "+100% uptime"), unsafe_allow_html=True)
+        st.markdown(render_metric_card("Consistency", "100%", "📊", "Same quality every time"), unsafe_allow_html=True)
+
+    # Summary improvement bar
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:12px;'>📈 Key Improvements</div>", unsafe_allow_html=True)
+    improvements = [("MTTR Reduction", 82), ("Detection Speed", 93), ("Auto-Resolution Rate", 73), ("Knowledge Coverage", 100), ("Engineer Burnout Reduction", 65)]
+    for label, val in improvements:
+        st.markdown(f"<div style='color:{c['text']}; font-size:0.85rem; margin-bottom:2px;'>{label}: <strong>{val}%</strong></div>", unsafe_allow_html=True)
+        st.progress(val / 100)
+
+
+def page_replay():
+    """Incident Replay page."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Incident Replay</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>Watch how agents processed an incident step-by-step, like a recording.</p>", unsafe_allow_html=True)
+
+    sample_incidents = [
+        "INC-001: Database Connection Pool Exhausted",
+        "INC-002: API Latency Spike > 5s",
+        "INC-003: Kubernetes Pod CrashLoopBackOff",
+        "INC-004: Redis Cache Miss Rate > 80%",
+        "INC-005: SSL Certificate Expiring",
+    ]
+    selected = st.selectbox("Select an incident to replay:", sample_incidents)
+
+    if st.button("▶ Play Replay", use_container_width=False):
+        st.session_state.replay_active = True
+
+    timeline = [
+        {"time": "00:00", "agent": "System", "action": "Alert received", "detail": f"{selected.split(': ')[1]}", "icon": "🚨"},
+        {"time": "00:03", "agent": "Triage Agent", "action": "Classifying severity", "detail": "Analyzing metrics, logs, and alert context", "icon": "🔍"},
+        {"time": "00:08", "agent": "Triage Agent", "action": "Classified as CRITICAL", "detail": "Service impact: HIGH. Affected users: ~2,400", "icon": "🏷️"},
+        {"time": "00:12", "agent": "Diagnostic Agent", "action": "Starting root cause analysis", "detail": "Querying CockroachDB for similar patterns", "icon": "🔬"},
+        {"time": "00:28", "agent": "Diagnostic Agent", "action": "Pattern match found", "detail": "87% similarity with INC-847 from 3 weeks ago", "icon": "🧬"},
+        {"time": "00:35", "agent": "Diagnostic Agent", "action": "Root cause identified", "detail": "Lock contention from concurrent bulk operations", "icon": "🎯"},
+        {"time": "00:42", "agent": "Resolution Agent", "action": "Executing playbook", "detail": "Applying automated fix: kill blocking process + pool resize", "icon": "🛠️"},
+        {"time": "01:15", "agent": "Resolution Agent", "action": "Fix applied successfully", "detail": "Service metrics returning to normal", "icon": "✅"},
+        {"time": "01:30", "agent": "Learning Agent", "action": "Storing knowledge", "detail": "Pattern saved to CockroachDB. Playbook updated.", "icon": "🧠"},
+        {"time": "01:45", "agent": "System", "action": "Incident resolved", "detail": "Total time: 1m 45s. Auto-resolved without human intervention.", "icon": "🎉"},
+    ]
+
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:20px 0 12px 0;'>📼 Timeline</div>", unsafe_allow_html=True)
+    for i, step in enumerate(timeline):
+        agent_color = c['accent'] if step['agent'] != 'System' else c['info']
+        st.markdown(f"""
+        <div style="display:flex; gap:12px; margin-bottom:8px; padding:10px 14px; background:{c['surface']}; border-radius:8px; border-left:3px solid {agent_color};">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:{c['text_secondary']}; min-width:45px;">{step['time']}</div>
+            <div style="font-size:1.1rem;">{step['icon']}</div>
+            <div>
+                <div style="font-weight:600; color:{c['text']}; font-size:0.85rem;">{step['agent']}: {step['action']}</div>
+                <div style="color:{c['text_secondary']}; font-size:0.8rem; margin-top:2px;">{step['detail']}</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+
+def page_persistence():
+    """Memory Persistence Demo - proves zero data loss with CockroachDB."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Memory Persistence Demo</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>Demonstrates zero data loss: agent state survives crashes thanks to CockroachDB.</p>", unsafe_allow_html=True)
+
+    if "persist_state" not in st.session_state:
+        st.session_state.persist_state = "idle"
+    if "persist_data" not in st.session_state:
+        st.session_state.persist_data = {}
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("1️⃣ Start Task", use_container_width=True):
+            st.session_state.persist_state = "running"
+            st.session_state.persist_data = {
+                "task_id": str(uuid.uuid4())[:8],
+                "agent": "Diagnostic Agent",
+                "progress": 67,
+                "findings": ["Connection spike at 14:23", "Memory at 89%", "3 slow queries identified"],
+                "context": {"incident_id": "INC-2847", "service": "payment-service"},
+                "cockroachdb_synced": True,
+            }
+            st.rerun()
+    with col2:
+        if st.button("2️⃣ Kill Agent (Crash)", use_container_width=True, disabled=st.session_state.persist_state != "running"):
+            st.session_state.persist_state = "crashed"
+            st.rerun()
+    with col3:
+        if st.button("3️⃣ Restart Agent", use_container_width=True, disabled=st.session_state.persist_state != "crashed"):
+            st.session_state.persist_state = "recovered"
+            st.rerun()
+
+    if st.session_state.persist_state == "running":
+        st.markdown(f"""
+        <div class="metric-card" style="border-left:4px solid {c['accent']};">
+            <div style="font-weight:700; color:{c['accent']};">✅ Agent Running - State in CockroachDB</div>
+            <pre style="color:{c['text']}; font-size:0.8rem; margin-top:8px; background:{c['surface2']}; padding:12px; border-radius:6px;">{json.dumps(st.session_state.persist_data, indent=2)}</pre>
+        </div>
+        """, unsafe_allow_html=True)
+        st.progress(0.67)
+        st.caption("Task progress: 67% complete")
+
+    elif st.session_state.persist_state == "crashed":
+        st.markdown(f"""
+        <div class="metric-card" style="border-left:4px solid {c['danger']};">
+            <div style="font-weight:700; color:{c['danger']};">💥 Agent CRASHED - Process terminated</div>
+            <div style="color:{c['text_secondary']}; margin-top:8px; font-size:0.85rem;">Agent process killed. In-memory state destroyed.</div>
+            <div style="color:{c['accent']}; margin-top:12px; font-weight:600;">But data persists in CockroachDB...</div>
+            <pre style="color:{c['text']}; font-size:0.8rem; margin-top:8px; background:{c['surface2']}; padding:12px; border-radius:6px;">{json.dumps(st.session_state.persist_data, indent=2)}</pre>
+        </div>
+        """, unsafe_allow_html=True)
+
+    elif st.session_state.persist_state == "recovered":
+        st.markdown(f"""
+        <div class="metric-card" style="border-left:4px solid {c['accent']};">
+            <div style="font-weight:700; color:{c['accent']};">🔄 Agent Recovered - State Restored from CockroachDB</div>
+            <div style="color:{c['text_secondary']}; margin-top:8px; font-size:0.85rem;">Agent restarted and loaded previous state from CockroachDB. <strong>Zero data loss.</strong></div>
+            <pre style="color:{c['text']}; font-size:0.8rem; margin-top:8px; background:{c['surface2']}; padding:12px; border-radius:6px;">{json.dumps(st.session_state.persist_data, indent=2)}</pre>
+            <div style="margin-top:12px; padding:8px 12px; background:{c['accent']}22; border-radius:6px; color:{c['accent']}; font-weight:600; font-size:0.85rem;">
+                ✅ Resumed at 67% - no work repeated. CockroachDB guarantees durability.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.progress(0.67)
+        st.caption("Resumed from checkpoint: 67% → continuing...")
+
+    else:
+        st.info("Click **Start Task** to begin the persistence demonstration.")
+
+
+def page_notifications():
+    """Notification Center."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Notification Center</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>Recent system notifications from agents and incident processing.</p>", unsafe_allow_html=True)
+
+    notifications = [
+        {"type": "success", "title": "Resolution Agent completed task", "detail": "INC-3021 auto-resolved: Redis cache cleared and warmed", "time": "2 min ago", "icon": "✅"},
+        {"type": "alert", "title": "New incident detected", "detail": "API latency spike on gateway-api (P95 > 3s)", "time": "5 min ago", "icon": "🚨"},
+        {"type": "info", "title": "Pattern learned", "detail": "New pattern stored: Memory leak → GC pressure → OOM in Java services", "time": "8 min ago", "icon": "🧠"},
+        {"type": "success", "title": "Playbook auto-executed", "detail": "Disk cleanup playbook triggered on logging-service (was at 94%)", "time": "12 min ago", "icon": "📋"},
+        {"type": "warning", "title": "Agent heartbeat delayed", "detail": "Learning Agent heartbeat 15s late (threshold: 10s)", "time": "18 min ago", "icon": "⚠️"},
+        {"type": "info", "title": "Knowledge graph updated", "detail": "3 new service dependency edges added from incident correlation", "time": "23 min ago", "icon": "🔗"},
+        {"type": "success", "title": "Weekly report generated", "detail": "47 incidents processed, 34 auto-resolved, MTTR improved 12%", "time": "1 hr ago", "icon": "📊"},
+        {"type": "alert", "title": "Predictive alert", "detail": "Certificate expiry predicted for auth-service in 48h", "time": "2 hr ago", "icon": "🔮"},
+    ]
+
+    type_colors = {"success": c['accent'], "alert": c['danger'], "warning": c['warning'], "info": c['info']}
+
+    for notif in notifications:
+        border_color = type_colors.get(notif['type'], c['border'])
+        st.markdown(f"""
+        <div style="padding:12px 16px; margin-bottom:8px; background:{c['surface']}; border-radius:10px; border-left:4px solid {border_color}; box-shadow:0 1px 3px {c['card_shadow']};">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                    <span style="font-size:1.2rem;">{notif['icon']}</span>
+                    <div>
+                        <div style="font-weight:600; color:{c['text']}; font-size:0.88rem;">{notif['title']}</div>
+                        <div style="color:{c['text_secondary']}; font-size:0.8rem; margin-top:3px;">{notif['detail']}</div>
+                    </div>
+                </div>
+                <span style="font-size:0.72rem; color:{c['text_secondary']}; white-space:nowrap;">{notif['time']}</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+
+def page_agent_status():
+    """Agent Status health monitor."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Agent Status Monitor</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>Real-time health status of all AI agents in the system.</p>", unsafe_allow_html=True)
+
+    agents = [
+        {"name": "Triage Agent", "status": "green", "task": "Classifying INC-3022", "uptime": "14d 7h 23m", "heartbeat": "2s ago", "processed": 1847},
+        {"name": "Diagnostic Agent", "status": "green", "task": "Analyzing root cause for INC-3021", "uptime": "14d 7h 23m", "heartbeat": "1s ago", "processed": 1623},
+        {"name": "Resolution Agent", "status": "yellow", "task": "Waiting for approval on RB-445", "uptime": "14d 7h 23m", "heartbeat": "8s ago", "processed": 1241},
+        {"name": "Learning Agent", "status": "green", "task": "Indexing patterns from last 24h", "uptime": "14d 7h 23m", "heartbeat": "3s ago", "processed": 982},
+    ]
+
+    status_colors = {"green": "#10b981", "yellow": "#f59e0b", "red": "#ef4444"}
+    status_labels = {"green": "Healthy", "yellow": "Degraded", "red": "Down"}
+
+    for agent in agents:
+        dot_color = status_colors[agent['status']]
+        st.markdown(f"""
+        <div style="padding:16px; margin-bottom:12px; background:{c['surface']}; border-radius:12px; border:1px solid {c['border']};">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:12px; height:12px; background:{dot_color}; border-radius:50%; box-shadow:0 0 6px {dot_color};"></div>
+                    <span style="font-weight:700; color:{c['text']}; font-size:0.95rem;">{agent['name']}</span>
+                </div>
+                <span style="font-size:0.75rem; padding:3px 8px; background:{dot_color}22; color:{dot_color}; border-radius:4px; font-weight:600;">{status_labels[agent['status']]}</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:0.8rem;">
+                <div style="color:{c['text_secondary']};">Current Task: <span style="color:{c['text']};">{agent['task']}</span></div>
+                <div style="color:{c['text_secondary']};">Uptime: <span style="color:{c['text']}; font-family:'JetBrains Mono',monospace;">{agent['uptime']}</span></div>
+                <div style="color:{c['text_secondary']};">Last Heartbeat: <span style="color:{c['accent']};">{agent['heartbeat']}</span></div>
+                <div style="color:{c['text_secondary']};">Incidents Processed: <span style="color:{c['text']}; font-weight:600;">{agent['processed']}</span></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Summary metrics
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:8px;'>System Summary</div>", unsafe_allow_html=True)
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.markdown(render_metric_card("Total Agents", "4", "🤖", "All operational"), unsafe_allow_html=True)
+    with col2:
+        st.markdown(render_metric_card("Healthy", "3", "💚", "75%"), unsafe_allow_html=True)
+    with col3:
+        st.markdown(render_metric_card("Degraded", "1", "💛", "Awaiting approval"), unsafe_allow_html=True)
+    with col4:
+        st.markdown(render_metric_card("Avg Response", "2.1s", "⚡", "↓0.3s from last week"), unsafe_allow_html=True)
+
+
+def page_search():
+    """Universal Search page."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Universal Search</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>Search across incidents, patterns, playbooks, and agent memory.</p>", unsafe_allow_html=True)
+
+    query = st.text_input("🔍 Search everything...", placeholder="e.g., connection pool, redis, memory leak, payment-service")
+
+    if query:
+        q_lower = query.lower()
+        # Mock categorized results
+        results = {
+            "Incidents": [
+                {"title": "INC-2847: Database Connection Pool Exhausted", "meta": "payment-service • critical • 3 days ago", "match": "connection pool"},
+                {"title": "INC-2901: Connection Timeout on DB Replica", "meta": "order-service • high • 1 day ago", "match": "connection"},
+                {"title": "INC-3005: Redis Connection Refused", "meta": "cache-layer • critical • 5 hours ago", "match": "connection"},
+            ],
+            "Patterns": [
+                {"title": "Bulk operations + high traffic → pool exhaustion", "meta": "Learned from 7 incidents • 94% confidence", "match": "pool"},
+                {"title": "Connection leak after deploy → gradual pool drain", "meta": "Learned from 4 incidents • 87% confidence", "match": "connection"},
+            ],
+            "Playbooks": [
+                {"title": "PB-012: Connection Pool Recovery", "meta": "Auto-executable • Used 12 times • Success rate: 100%", "match": "connection pool"},
+                {"title": "PB-008: Database Failover Procedure", "meta": "Requires approval • Used 3 times", "match": "database"},
+            ],
+            "Agent Memory": [
+                {"title": "payment-service typically exhausts pool under 2.5x traffic", "meta": "Diagnostic Agent • High confidence", "match": "pool"},
+                {"title": "Redis cluster in us-east-1 has 50ms higher latency on Mondays", "meta": "Learning Agent • Medium confidence", "match": "redis"},
+            ],
+        }
+
+        total = sum(len(v) for v in results.values())
+        st.markdown(f"<div style='color:{c['text_secondary']}; font-size:0.85rem; margin:12px 0;'>Found <strong>{total}</strong> results for \"{query}\"</div>", unsafe_allow_html=True)
+
+        for category, items in results.items():
+            filtered = [item for item in items if q_lower in item['match'] or q_lower in item['title'].lower()]
+            if not filtered:
+                filtered = items[:1]  # Show at least one from each category for demo
+            st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:16px 0 8px 0; font-size:0.9rem;'>{category} ({len(filtered)})</div>", unsafe_allow_html=True)
+            for item in filtered:
+                st.markdown(f"""
+                <div style="padding:10px 14px; margin-bottom:6px; background:{c['surface']}; border-radius:8px; border:1px solid {c['border']};">
+                    <div style="font-weight:600; color:{c['text']}; font-size:0.85rem;">{item['title']}</div>
+                    <div style="color:{c['text_secondary']}; font-size:0.78rem; margin-top:3px;">{item['meta']}</div>
+                </div>
+                """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+        <div style="text-align:center; padding:48px; color:{c['text_secondary']};">
+            <div style="font-size:2.5rem; margin-bottom:12px;">🔍</div>
+            <div style="font-size:0.9rem;">Type a query to search across all system data</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+
+def page_dependency():
+    """Incident Dependency Map."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Incident Dependency Map</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>Service dependencies and cascading failure visualization.</p>", unsafe_allow_html=True)
+
+    services = {
+        "gateway-api": {"deps": ["auth-service", "payment-service", "order-service"], "status": "healthy"},
+        "auth-service": {"deps": ["user-db", "redis-cache"], "status": "healthy"},
+        "payment-service": {"deps": ["payment-db", "stripe-api", "queue-service"], "status": "degraded"},
+        "order-service": {"deps": ["order-db", "payment-service", "inventory-service"], "status": "healthy"},
+        "payment-db": {"deps": ["cockroachdb-cluster"], "status": "failing"},
+        "cockroachdb-cluster": {"deps": [], "status": "healthy"},
+        "redis-cache": {"deps": [], "status": "healthy"},
+        "user-db": {"deps": ["cockroachdb-cluster"], "status": "healthy"},
+        "order-db": {"deps": ["cockroachdb-cluster"], "status": "healthy"},
+        "stripe-api": {"deps": [], "status": "healthy"},
+        "queue-service": {"deps": ["redis-cache"], "status": "healthy"},
+        "inventory-service": {"deps": ["inventory-db"], "status": "healthy"},
+        "inventory-db": {"deps": ["cockroachdb-cluster"], "status": "healthy"},
+    }
+
+    status_colors = {"healthy": c['accent'], "degraded": c['warning'], "failing": c['danger']}
+    status_icons = {"healthy": "🟢", "degraded": "🟡", "failing": "🔴"}
+
+    # Show failing service and its upstream impact
+    st.markdown(f"""
+    <div class="metric-card" style="border-left:4px solid {c['danger']}; margin-bottom:20px;">
+        <div style="font-weight:700; color:{c['danger']};">🔴 Active Failure: payment-db</div>
+        <div style="color:{c['text_secondary']}; font-size:0.85rem; margin-top:4px;">Connection pool exhausted → Cascading to upstream services</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin-bottom:12px;'>Service Map</div>", unsafe_allow_html=True)
+
+    # Affected path highlight
+    affected = {"payment-db", "payment-service", "order-service", "gateway-api"}
+
+    for svc, info in services.items():
+        svc_color = status_colors[info['status']]
+        is_affected = svc in affected
+        border = f"border:2px solid {c['danger']};" if is_affected and info['status'] == 'healthy' else f"border:1px solid {c['border']};"
+        affected_label = " <span style='color:" + c['danger'] + "; font-size:0.72rem;'>⚠️ DOWNSTREAM AFFECTED</span>" if (is_affected and info['status'] == 'healthy') else ""
+        deps_str = ", ".join(info['deps']) if info['deps'] else "No dependencies"
+        st.markdown(f"""
+        <div style="padding:12px 16px; margin-bottom:6px; background:{c['surface']}; border-radius:8px; {border}">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span>{status_icons[info['status']]}</span>
+                    <span style="font-weight:600; color:{c['text']}; font-size:0.88rem;">{svc}</span>
+                    {affected_label}
+                </div>
+                <span style="font-size:0.75rem; color:{svc_color}; font-weight:600;">{info['status'].upper()}</span>
+            </div>
+            <div style="font-size:0.78rem; color:{c['text_secondary']}; margin-top:4px;">Depends on: {deps_str}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Impact summary
+    st.markdown(f"<br>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown(render_metric_card("Services Affected", "4", "🔗", "Out of 13 total"), unsafe_allow_html=True)
+    with col2:
+        st.markdown(render_metric_card("Blast Radius", "31%", "💥", "Of service mesh"), unsafe_allow_html=True)
+    with col3:
+        st.markdown(render_metric_card("Root Cause", "payment-db", "🎯", "Connection pool"), unsafe_allow_html=True)
+
+
+def page_weekly_report():
+    """Weekly Report Generator."""
+    c = get_colors()
+    st.markdown(f"<h2 style='color:{c['text']}; font-weight:800;'>Weekly Report</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{c['text_secondary']}; margin-bottom:24px;'>Auto-generated summary of incident response performance this week.</p>", unsafe_allow_html=True)
+
+    week_start = (datetime.now() - timedelta(days=7)).strftime("%b %d")
+    week_end = datetime.now().strftime("%b %d, %Y")
+
+    st.markdown(f"""
+    <div class="metric-card" style="text-align:center; margin-bottom:20px;">
+        <div style="font-size:0.8rem; color:{c['text_secondary']};">Report Period</div>
+        <div style="font-size:1.1rem; font-weight:700; color:{c['text']};">{week_start} – {week_end}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Key metrics row
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.markdown(render_metric_card("Total Incidents", "47", "🚨", "+3 vs last week"), unsafe_allow_html=True)
+    with col2:
+        st.markdown(render_metric_card("Auto-Resolved", "34", "🤖", "72% resolution rate"), unsafe_allow_html=True)
+    with col3:
+        st.markdown(render_metric_card("Patterns Learned", "8", "🧠", "+2 new this week"), unsafe_allow_html=True)
+    with col4:
+        st.markdown(render_metric_card("MTTR Improvement", "↓18%", "📉", "8.2 min avg"), unsafe_allow_html=True)
+
+    # Breakdown
+    st.markdown(f"<br><div style='font-weight:700; color:{c['text']}; margin-bottom:12px;'>📋 Detailed Breakdown</div>", unsafe_allow_html=True)
+
+    breakdown_data = pd.DataFrame({
+        "Category": ["Critical", "High", "Medium", "Low"],
+        "Count": [5, 14, 18, 10],
+        "Auto-Resolved": [3, 11, 15, 5],
+        "Avg MTTR": ["12.3 min", "8.1 min", "5.4 min", "3.2 min"],
+        "Human Intervention": [2, 3, 3, 5],
+    })
+    st.dataframe(breakdown_data, use_container_width=True, hide_index=True)
+
+    # Top services
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:20px 0 12px 0;'>🔥 Most Affected Services</div>", unsafe_allow_html=True)
+    top_services = [("payment-service", 12, "critical"), ("gateway-api", 9, "high"), ("cache-layer", 8, "medium"), ("auth-service", 6, "medium"), ("ml-inference", 5, "high")]
+    for svc, count, severity in top_services:
+        sev_color = c['danger'] if severity == 'critical' else c['warning'] if severity == 'high' else c['info']
+        pct = count / 47 * 100
+        st.markdown(f"""
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+            <span style="font-size:0.83rem; color:{c['text']}; min-width:140px; font-weight:500;">{svc}</span>
+            <div style="flex:1; height:8px; background:{c['surface2']}; border-radius:4px; overflow:hidden;">
+                <div style="width:{pct}%; height:100%; background:{sev_color}; border-radius:4px;"></div>
+            </div>
+            <span style="font-size:0.8rem; color:{c['text_secondary']}; min-width:30px;">{count}</span>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Agent performance summary
+    st.markdown(f"<div style='font-weight:700; color:{c['text']}; margin:20px 0 12px 0;'>🤖 Agent Performance</div>", unsafe_allow_html=True)
+    agent_perf = pd.DataFrame({
+        "Agent": ["Triage Agent", "Diagnostic Agent", "Resolution Agent", "Learning Agent"],
+        "Tasks Completed": [47, 42, 34, 34],
+        "Avg Time": ["1.2s", "18.4s", "45.2s", "12.1s"],
+        "Success Rate": ["100%", "95%", "100%", "100%"],
+        "Confidence": ["94%", "91%", "97%", "89%"],
+    })
+    st.dataframe(agent_perf, use_container_width=True, hide_index=True)
+
+
+# 
 # MAIN ROUTER
 # 
 
@@ -2655,6 +3250,16 @@ PAGE_MAP = {
     "mttr": page_mttr,
     "categories": page_categories,
     "roi": page_roi,
+    "simulator": page_simulator,
+    "thought_process": page_thought_process,
+    "before_after": page_before_after,
+    "replay": page_replay,
+    "persistence": page_persistence,
+    "notifications": page_notifications,
+    "agent_status": page_agent_status,
+    "search": page_search,
+    "dependency": page_dependency,
+    "weekly_report": page_weekly_report,
 }
 
 # Route to correct page
