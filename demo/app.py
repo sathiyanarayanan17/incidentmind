@@ -90,6 +90,14 @@ if "runbook_approvals" not in st.session_state:
     st.session_state.runbook_approvals = {}
 if "region" not in st.session_state:
     st.session_state.region = random.choice(["us-east-1", "eu-west-1", "ap-south-1"])
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+if "user_name" not in st.session_state:
+    st.session_state.user_name = ""
+if "user_email" not in st.session_state:
+    st.session_state.user_email = ""
+if "user_role" not in st.session_state:
+    st.session_state.user_role = "Admin"
 
 
 #  Theme Colors 
@@ -603,82 +611,222 @@ def inject_css():
 inject_css()
 
 
+#  Login Page 
 
-#  Sidebar Navigation 
+def render_login_page():
+    c = get_colors()
+    st.markdown(f"""
+    <div style="display:flex; justify-content:center; align-items:center; min-height:80vh;">
+        <div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:16px; padding:48px; max-width:420px; width:100%; box-shadow:0 8px 30px {c['card_shadow']};">
+            <div style="text-align:center; margin-bottom:32px;">
+                <div style="width:56px; height:56px; background:linear-gradient(135deg, {c['accent']}, #06b6d4); border-radius:12px; display:inline-flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                    <span style="font-size:24px; color:white; font-weight:900;">IM</span>
+                </div>
+                <h2 style="font-size:1.5rem; font-weight:700; color:{c['text']}; margin:0;">Welcome to IncidentMind</h2>
+                <p style="font-size:0.9rem; color:{c['text_secondary']}; margin-top:8px;">Sign in to access the incident response platform</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1, 1.5, 1])
+    with col2:
+        email = st.text_input("Email", placeholder="you@company.com", key="login_email")
+        password = st.text_input("Password", type="password", placeholder="Enter password", key="login_pass")
+        role = st.selectbox("Role", ["Admin", "SRE Lead", "Engineer", "Viewer"], key="login_role")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("Sign In", type="primary", use_container_width=True):
+            if email:
+                st.session_state.logged_in = True
+                st.session_state.user_email = email
+                st.session_state.user_name = email.split("@")[0].replace(".", " ").title()
+                st.session_state.user_role = role
+                st.session_state.current_page = "home"
+                st.rerun()
+            else:
+                st.error("Please enter your email")
+
+        st.markdown(f"""
+        <div style="text-align:center; margin-top:24px; font-size:0.8rem; color:{c['text_secondary']};">
+            Demo credentials: any email works<br>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.75rem;">v0.1.0 - CockroachDB x AWS Hackathon</span>
+        </div>
+        """, unsafe_allow_html=True)
+
+
+#  Sidebar Navigation (matching professional grouped style) 
 
 def render_sidebar():
     c = get_colors()
     with st.sidebar:
+        # Back link + Logo
         st.markdown(f"""
-        <div style="padding: 16px 0; text-align: center; border-bottom: 1px solid {c['border']}; margin-bottom: 16px;">
-            <div style="font-size: 2rem;"></div>
-            <div style="font-size: 1.1rem; font-weight: 800; color: {c['text']};">IncidentMind</div>
-            <div style="font-size: 0.75rem; color: {c['text_secondary']};">Multi-Agent DevOps AI</div>
+        <div style="padding:12px 8px 8px 8px;">
+            <a href="#" style="font-size:0.8rem; color:{c['accent']}; text-decoration:none; display:flex; align-items:center; gap:6px;">
+                <span style="font-size:0.7rem;">&#8592;</span> Back to Hub
+            </a>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; padding:8px 12px 20px 12px; border-bottom:1px solid {c['border']}; margin-bottom:16px;">
+            <div style="width:36px; height:36px; background:linear-gradient(135deg, {c['accent']}, #06b6d4); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <span style="color:white; font-weight:800; font-size:14px;">IM</span>
+            </div>
+            <div>
+                <div style="font-size:0.95rem; font-weight:700; color:{c['text']};">INCIDENTMIND</div>
+                <div style="font-size:0.7rem; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:0.5px;">{st.session_state.user_role}</div>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
         # Theme toggle
         col1, col2 = st.columns(2)
         with col1:
-            if st.button(" Dark", use_container_width=True, key="btn_dark"):
+            if st.button("Dark", use_container_width=True, key="btn_dark"):
                 st.session_state.theme = "dark"
                 st.rerun()
         with col2:
-            if st.button(" Light", use_container_width=True, key="btn_light"):
+            if st.button("Light", use_container_width=True, key="btn_light"):
                 st.session_state.theme = "light"
                 st.rerun()
 
-        st.markdown(f"<div style='margin-top:8px; padding:4px 12px; background:{c['surface2']}; border-radius:6px; text-align:center; font-size:0.75rem; color:{c['text_secondary']};'>{' Dark Mode' if st.session_state.theme == 'dark' else ' Light Mode'}</div>", unsafe_allow_html=True)
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        # Navigation
-        pages = [
-            ("", "home", "Home"),
-            ("", "incidents", "Live Incidents"),
-            ("", "agent_feed", "Agent Feed"),
-            ("", "knowledge_graph", "Knowledge Graph"),
-            ("", "mcp_query", "MCP Query Panel"),
-            ("", "health", "Health Dashboard"),
-            ("", "audit", "Audit Log"),
-            ("", "rbac", "RBAC & Access"),
-            ("", "regions", "Multi-Region"),
-            ("", "rate_limit", "Rate Limiting"),
-            ("", "heatmap", "Incident Heatmap"),
-            ("", "playbooks", "Playbook Library"),
-            ("", "performance", "Agent Performance"),
-            ("", "export", "Export & Share"),
-            ("", "calibration", "Confidence Calibration"),
-            ("", "predictions", "Predictive Alerts"),
-            ("", "multi_chat", "Multi-Agent Chat"),
-            ("", "runbook", "Runbook Dry Run"),
-            ("", "dedup", "Deduplication"),
-            ("⏱", "mttr", "MTTR Dashboard"),
-            ("", "categories", "Failure Categories"),
-            ("", "roi", "ROI Calculator"),
-        ]
-
-        for icon, key, label in pages:
-            active = "active" if st.session_state.current_page == key else ""
-            if st.button(f"{icon}  {label}", key=f"nav_{key}", use_container_width=True):
-                st.session_state.current_page = key
-                st.rerun()
-
-        # Region indicator
+        # SECTION: INCIDENT OPS
         st.markdown(f"""
-        <div style="margin-top: 24px; padding: 12px; background: {c['surface2']}; border-radius: 8px; font-size: 0.8rem;">
-            <div style="color: {c['text_secondary']}; margin-bottom: 4px;"> Active Region</div>
-            <div style="color: {c['accent']}; font-family: 'JetBrains Mono', monospace; font-weight: 600;">{st.session_state.region}</div>
+        <div style="padding:20px 12px 6px 12px; font-size:0.7rem; font-weight:600; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:1px;">
+            Incident Operations
         </div>
         """, unsafe_allow_html=True)
 
-        # Demo mode badge
+        incident_ops = [
+            ("home", "Overview"),
+            ("incidents", "Live Incidents"),
+            ("agent_feed", "Agent Feed"),
+            ("heatmap", "Incident Heatmap"),
+            ("dedup", "Deduplication"),
+            ("predictions", "Predictive Alerts"),
+        ]
+        for key, label in incident_ops:
+            is_active = st.session_state.current_page == key
+            if st.button(
+                f"{'  > ' if is_active else '    '}{label}{'  *' if is_active else ''}",
+                key=f"nav_{key}",
+                use_container_width=True,
+            ):
+                st.session_state.current_page = key
+                st.rerun()
+
+        # SECTION: AGENT TOOLS
+        st.markdown(f"""
+        <div style="padding:20px 12px 6px 12px; font-size:0.7rem; font-weight:600; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:1px;">
+            Agent Tools
+        </div>
+        """, unsafe_allow_html=True)
+
+        agent_tools = [
+            ("mcp_query", "MCP Query Panel"),
+            ("multi_chat", "Multi-Agent Chat"),
+            ("runbook", "Runbook Dry Run"),
+            ("playbooks", "Playbook Library"),
+            ("knowledge_graph", "Knowledge Graph"),
+            ("calibration", "Confidence Calibration"),
+        ]
+        for key, label in agent_tools:
+            is_active = st.session_state.current_page == key
+            if st.button(
+                f"{'  > ' if is_active else '    '}{label}{'  *' if is_active else ''}",
+                key=f"nav_{key}",
+                use_container_width=True,
+            ):
+                st.session_state.current_page = key
+                st.rerun()
+
+        # SECTION: INFRASTRUCTURE
+        st.markdown(f"""
+        <div style="padding:20px 12px 6px 12px; font-size:0.7rem; font-weight:600; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:1px;">
+            Infrastructure
+        </div>
+        """, unsafe_allow_html=True)
+
+        infra_pages = [
+            ("health", "Health Dashboard"),
+            ("regions", "Multi-Region"),
+            ("rate_limit", "Rate Limiting"),
+            ("rbac", "RBAC & Access"),
+            ("audit", "Audit Log"),
+        ]
+        for key, label in infra_pages:
+            is_active = st.session_state.current_page == key
+            if st.button(
+                f"{'  > ' if is_active else '    '}{label}{'  *' if is_active else ''}",
+                key=f"nav_{key}",
+                use_container_width=True,
+            ):
+                st.session_state.current_page = key
+                st.rerun()
+
+        # SECTION: ANALYTICS
+        st.markdown(f"""
+        <div style="padding:20px 12px 6px 12px; font-size:0.7rem; font-weight:600; color:{c['text_secondary']}; text-transform:uppercase; letter-spacing:1px;">
+            Analytics & Reports
+        </div>
+        """, unsafe_allow_html=True)
+
+        analytics_pages = [
+            ("performance", "Agent Performance"),
+            ("mttr", "MTTR Dashboard"),
+            ("categories", "Failure Categories"),
+            ("roi", "ROI Calculator"),
+            ("export", "Export & Share"),
+        ]
+        for key, label in analytics_pages:
+            is_active = st.session_state.current_page == key
+            if st.button(
+                f"{'  > ' if is_active else '    '}{label}{'  *' if is_active else ''}",
+                key=f"nav_{key}",
+                use_container_width=True,
+            ):
+                st.session_state.current_page = key
+                st.rerun()
+
+        # USER PROFILE (at bottom, like the screenshot)
+        st.markdown(f"""
+        <div style="margin-top:32px; padding-top:16px; border-top:1px solid {c['border']};">
+            <div style="display:flex; align-items:center; gap:10px; padding:8px 12px;">
+                <div style="width:32px; height:32px; background:{c['accent']}; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                    <span style="color:white; font-weight:700; font-size:13px;">{st.session_state.user_name[0].upper() if st.session_state.user_name else 'U'}</span>
+                </div>
+                <div>
+                    <div style="font-size:0.85rem; font-weight:600; color:{c['text']};">{st.session_state.user_name}</div>
+                    <div style="font-size:0.7rem; color:{c['text_secondary']};">{st.session_state.user_role.lower()}</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if st.button("Sign Out", key="nav_signout", use_container_width=True):
+            st.session_state.logged_in = False
+            st.session_state.current_page = "home"
+            st.rerun()
+
+        # Region indicator
+        st.markdown(f"""
+        <div style="margin-top:12px; padding:10px 12px; background:{c['surface2']}; border-radius:8px; font-size:0.75rem;">
+            <div style="color:{c['text_secondary']};">Active Region</div>
+            <div style="color:{c['accent']}; font-family:'JetBrains Mono',monospace; font-weight:600; margin-top:2px;">{st.session_state.region}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
         if DEMO_MODE:
             st.markdown(f"""
-            <div style="margin-top: 12px; padding: 8px 12px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; text-align: center;">
-                <span style="color: #f59e0b; font-size: 0.8rem; font-weight: 600;"> DEMO MODE</span>
+            <div style="margin-top:8px; padding:6px 12px; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:6px; text-align:center;">
+                <span style="color:#f59e0b; font-size:0.75rem; font-weight:600;">DEMO MODE</span>
             </div>
             """, unsafe_allow_html=True)
+
+
+# Render login or main app
+if not st.session_state.logged_in:
+    render_login_page()
+    st.stop()
 
 render_sidebar()
 
