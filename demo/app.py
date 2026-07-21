@@ -616,6 +616,13 @@ inject_css()
 def render_landing_page():
     c = get_colors()
 
+    # Top navigation bar background
+    st.markdown(f"""<div style="background:{c['surface']}; border-bottom:1px solid {c['border']}; padding:12px 24px; margin:-1rem -1rem 24px -1rem; display:flex; align-items:center; justify-content:space-between;">
+<span style="font-size:1.2rem; font-weight:900; color:{c['text']}; letter-spacing:-0.5px;">IncidentMind</span>
+<span style="font-size:0.8rem; color:{c['text_secondary']};">Features | How it Works | Architecture | Docs</span>
+<span style="font-size:0.85rem; font-weight:600; color:{c['accent']};">Sign In</span>
+</div>""", unsafe_allow_html=True)
+
     # Top navigation bar with working buttons
     nav_col1, nav_col2, nav_col3, nav_col4, nav_col5, nav_col6, nav_col7 = st.columns([2, 1, 1, 1, 1, 1, 1])
     with nav_col1:
