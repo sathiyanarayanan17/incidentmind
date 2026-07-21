@@ -616,29 +616,28 @@ inject_css()
 def render_landing_page():
     c = get_colors()
 
-    # Top navigation bar background
-    st.markdown(f"""<div style="background:{c['surface']}; border-bottom:1px solid {c['border']}; padding:12px 24px; margin:-1rem -1rem 24px -1rem; display:flex; align-items:center; justify-content:space-between;">
-<span style="font-size:1.2rem; font-weight:900; color:{c['text']}; letter-spacing:-0.5px;">IncidentMind</span>
-<span style="font-size:0.8rem; color:{c['text_secondary']};">Features | How it Works | Architecture | Docs</span>
-<span style="font-size:0.85rem; font-weight:600; color:{c['accent']};">Sign In</span>
-</div>""", unsafe_allow_html=True)
+    # Top navigation bar with white background
+    st.markdown(f"""<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:4px 12px; margin-bottom:24px; box-shadow:0 2px 8px {c['card_shadow']};"></div>""", unsafe_allow_html=True)
 
-    # Top navigation bar with working buttons
     nav_col1, nav_col2, nav_col3, nav_col4, nav_col5, nav_col6, nav_col7 = st.columns([2, 1, 1, 1, 1, 1, 1])
     with nav_col1:
         st.markdown(f'<div style="font-size:1.2rem; font-weight:900; color:{c["text"]}; padding:8px 0;">IncidentMind</div>', unsafe_allow_html=True)
     with nav_col2:
         if st.button("Features", key="nav_features"):
-            pass  # scrolls to features section below
+            st.session_state.current_page = "features"
+            st.rerun()
     with nav_col3:
         if st.button("How it Works", key="nav_howitworks"):
-            pass
+            st.session_state.current_page = "howitworks"
+            st.rerun()
     with nav_col4:
         if st.button("Architecture", key="nav_arch"):
-            pass
+            st.session_state.current_page = "architecture"
+            st.rerun()
     with nav_col5:
         if st.button("Docs", key="nav_docs"):
-            pass
+            st.session_state.current_page = "docs"
+            st.rerun()
     with nav_col6:
         if st.button("Sign In", key="nav_signin_btn"):
             st.session_state.current_page = "signin"
@@ -827,6 +826,153 @@ def render_signin_page():
         st.markdown(f'<div style="text-align:center; font-size:0.75rem; color:{c["text_secondary"]}; margin-top:16px;">Demo mode: any email works, no password needed</div>', unsafe_allow_html=True)
 
 
+#  Sub Pages (Features, How it Works, Architecture, Docs) 
+
+def _render_subpage_nav():
+    """Common nav bar for sub pages."""
+    c = get_colors()
+    col1, col2 = st.columns([1, 5])
+    with col1:
+        if st.button("< Back to Home", key="subpage_back"):
+            st.session_state.current_page = "home"
+            st.rerun()
+    with col2:
+        st.markdown(f'<div style="font-size:1.1rem; font-weight:800; color:{c["text"]}; padding:8px 0;">IncidentMind</div>', unsafe_allow_html=True)
+    st.markdown("---")
+
+
+def render_features_page():
+    c = get_colors()
+    _render_subpage_nav()
+    st.markdown(f'<h1 style="font-size:2.5rem; font-weight:800; color:{c["text"]}; text-align:center; margin-bottom:32px;">Features</h1>', unsafe_allow_html=True)
+
+    features = [
+        ("Zero-Downtime Recovery", "Kill any agent mid-task. It resumes from CockroachDB state. No work lost, ever."),
+        ("Semantic Vector Search", "Find similar past incidents in under 1 second using CockroachDB distributed vector indexing."),
+        ("Multi-Agent Collaboration", "Four specialized agents work together through shared persistent memory."),
+        ("Pattern Learning", "The Correlator Agent identifies recurring failures and gets smarter over time."),
+        ("MCP Server Integration", "Human operators query incident memory via Claude or Cursor with natural language."),
+        ("Crash Recovery", "Idempotent state machine design ensures agents resume cleanly after any failure."),
+        ("Unified Memory Layer", "Vectors, relational data, and agent state in one database. No sync issues."),
+        ("Production Observability", "Full audit log, reasoning traces, and performance metrics for every agent action."),
+    ]
+
+    for i in range(0, len(features), 2):
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown(f"""<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; margin-bottom:16px;">
+<div style="font-size:1rem; font-weight:700; color:{c['text']}; margin-bottom:8px;">{features[i][0]}</div>
+<div style="font-size:0.85rem; color:{c['text_secondary']}; line-height:1.6;">{features[i][1]}</div>
+</div>""", unsafe_allow_html=True)
+        if i + 1 < len(features):
+            with col2:
+                st.markdown(f"""<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; margin-bottom:16px;">
+<div style="font-size:1rem; font-weight:700; color:{c['text']}; margin-bottom:8px;">{features[i+1][0]}</div>
+<div style="font-size:0.85rem; color:{c['text_secondary']}; line-height:1.6;">{features[i+1][1]}</div>
+</div>""", unsafe_allow_html=True)
+
+
+def render_howitworks_page():
+    c = get_colors()
+    _render_subpage_nav()
+    st.markdown(f'<h1 style="font-size:2.5rem; font-weight:800; color:{c["text"]}; text-align:center; margin-bottom:16px;">How it Works</h1>', unsafe_allow_html=True)
+    st.markdown(f'<p style="text-align:center; color:{c["text_secondary"]}; margin-bottom:32px;">The full incident response pipeline in 5 steps</p>', unsafe_allow_html=True)
+
+    steps = [
+        ("1. Alert Ingestion", "AWS Lambda receives alerts from CloudWatch, PagerDuty, or Datadog and creates an incident in CockroachDB."),
+        ("2. Triage", "The Triage Agent classifies severity, checks known patterns in memory, and routes the incident."),
+        ("3. Diagnosis", "The Diagnosis Agent performs semantic vector search over past incidents to find similar root causes."),
+        ("4. Correlation", "The Correlator Agent analyzes patterns across all incidents and builds institutional knowledge."),
+        ("5. Resolution", "The Resolution Agent proposes fixes based on past successful resolutions, ranked by confidence."),
+    ]
+
+    for title, desc in steps:
+        st.markdown(f"""<div style="background:{c['surface']}; border-left:4px solid {c['accent']}; border-radius:0 12px 12px 0; padding:20px 24px; margin-bottom:12px;">
+<div style="font-size:1rem; font-weight:700; color:{c['text']}; margin-bottom:6px;">{title}</div>
+<div style="font-size:0.85rem; color:{c['text_secondary']}; line-height:1.6;">{desc}</div>
+</div>""", unsafe_allow_html=True)
+
+
+def render_architecture_page():
+    c = get_colors()
+    _render_subpage_nav()
+    st.markdown(f'<h1 style="font-size:2.5rem; font-weight:800; color:{c["text"]}; text-align:center; margin-bottom:32px;">Architecture</h1>', unsafe_allow_html=True)
+
+    st.markdown(f"""<div style="max-width:750px; margin:0 auto; background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:32px; font-family:JetBrains Mono,monospace; font-size:0.8rem; color:{c['text_secondary']}; line-height:2.2;">
+<div style="text-align:center; color:{c['text']}; font-weight:700; font-size:0.9rem;">Event Sources</div>
+<div style="text-align:center; color:{c['text_secondary']}; font-size:0.75rem;">(CloudWatch Alarms, PagerDuty, Slack webhooks)</div>
+<div style="text-align:center; color:{c['accent']}; font-size:1.2rem;">|</div>
+<div style="text-align:center; color:{c['text']}; font-weight:700;">AWS Lambda - Event Ingestion</div>
+<div style="text-align:center; color:{c['accent']}; font-size:1.2rem;">|</div>
+<div style="text-align:center; color:{c['text']}; font-weight:700; font-size:0.9rem;">Agent Orchestrator (Amazon ECS)</div>
+<div style="text-align:center; color:{c['text_secondary']};">[Triage] -- [Diagnosis] -- [Correlator] -- [Resolution]</div>
+<div style="text-align:center; color:{c['accent']}; font-size:1.2rem;">|</div>
+<div style="text-align:center; background:rgba(16,185,129,0.1); border:1px solid {c['accent']}; border-radius:8px; padding:12px; margin:8px 0;">
+<div style="color:{c['accent']}; font-weight:700; font-size:0.95rem;">CockroachDB Cloud</div>
+<div style="color:{c['text_secondary']}; font-size:0.75rem;">Agent State | Incidents | Vector Embeddings | Correlation Patterns</div>
+</div>
+<div style="text-align:center; color:{c['accent']}; font-size:1.2rem;">|</div>
+<div style="text-align:center; color:{c['text_secondary']};">MCP Server (read-only, audit logged)</div>
+<div style="text-align:center; color:{c['accent']}; font-size:1.2rem;">|</div>
+<div style="text-align:center; color:{c['text']}; font-weight:700;">Claude / Cursor (Human Operator)</div>
+</div>""", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(f'<h3 style="text-align:center; color:{c["text"]}; margin-bottom:16px;">CockroachDB Tools Used</h3>', unsafe_allow_html=True)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown(f"""<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:20px; text-align:center;">
+<div style="font-weight:700; color:{c['text']}; margin-bottom:6px;">Distributed Vector Indexing</div>
+<div style="font-size:0.8rem; color:{c['text_secondary']};">Semantic search over incident history</div>
+</div>""", unsafe_allow_html=True)
+    with col2:
+        st.markdown(f"""<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:20px; text-align:center;">
+<div style="font-weight:700; color:{c['text']}; margin-bottom:6px;">MCP Server</div>
+<div style="font-size:0.8rem; color:{c['text_secondary']};">Human operators query memory via Claude</div>
+</div>""", unsafe_allow_html=True)
+    with col3:
+        st.markdown(f"""<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:10px; padding:20px; text-align:center;">
+<div style="font-weight:700; color:{c['text']}; margin-bottom:6px;">ccloud CLI</div>
+<div style="font-size:0.8rem; color:{c['text_secondary']};">Automated cluster provisioning and RBAC</div>
+</div>""", unsafe_allow_html=True)
+
+
+def render_docs_page():
+    c = get_colors()
+    _render_subpage_nav()
+    st.markdown(f'<h1 style="font-size:2.5rem; font-weight:800; color:{c["text"]}; text-align:center; margin-bottom:32px;">Documentation</h1>', unsafe_allow_html=True)
+
+    st.markdown(f"""<div style="max-width:700px; margin:0 auto;">
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; margin-bottom:16px;">
+<div style="font-weight:700; color:{c['text']}; margin-bottom:8px;">Quick Start</div>
+<div style="font-size:0.85rem; color:{c['text_secondary']}; line-height:1.8; font-family:JetBrains Mono,monospace;">
+1. git clone https://github.com/sathiyanarayanan17/incidentmind.git<br>
+2. pip install -r requirements.txt<br>
+3. cp .env.example .env  (add your credentials)<br>
+4. python scripts/seed_data.py<br>
+5. streamlit run demo/app.py
+</div>
+</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; margin-bottom:16px;">
+<div style="font-weight:700; color:{c['text']}; margin-bottom:8px;">Requirements</div>
+<div style="font-size:0.85rem; color:{c['text_secondary']}; line-height:1.8;">
+- Python 3.11+<br>
+- CockroachDB Cloud account<br>
+- AWS account with Bedrock access<br>
+- Docker (optional, for deployment)
+</div>
+</div>
+<div style="background:{c['surface']}; border:1px solid {c['border']}; border-radius:12px; padding:24px; margin-bottom:16px;">
+<div style="font-weight:700; color:{c['text']}; margin-bottom:8px;">Links</div>
+<div style="font-size:0.85rem; color:{c['text_secondary']}; line-height:1.8;">
+- <a href="https://github.com/sathiyanarayanan17/incidentmind" style="color:{c['accent']};">GitHub Repository</a><br>
+- <a href="https://cockroachlabs.cloud/mcp" style="color:{c['accent']};">CockroachDB MCP Server</a><br>
+- <a href="https://docs.aws.amazon.com/bedrock/" style="color:{c['accent']};">Amazon Bedrock Docs</a>
+</div>
+</div>
+</div>""", unsafe_allow_html=True)
+
+
 #  Sidebar Navigation (matching professional grouped style) 
 
 def render_sidebar():
@@ -1002,6 +1148,14 @@ if not st.session_state.logged_in:
 
     if st.session_state.current_page == "signin":
         render_signin_page()
+    elif st.session_state.current_page == "features":
+        render_features_page()
+    elif st.session_state.current_page == "howitworks":
+        render_howitworks_page()
+    elif st.session_state.current_page == "architecture":
+        render_architecture_page()
+    elif st.session_state.current_page == "docs":
+        render_docs_page()
     else:
         render_landing_page()
     st.stop()
